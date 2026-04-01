@@ -330,7 +330,14 @@
     queueBtn: byId("queueBtn"),
     drainQueueBtn: byId("drainQueueBtn"),
     exportBtn: byId("exportBtn"),
-    importInput: byId("importInput")
+    importInput: byId("importInput"),
+    runBtnProxy: byId("runBtnProxy"),
+    stepBtnProxy: byId("stepBtnProxy"),
+    resetBtnProxy: byId("resetBtnProxy"),
+    queueBtnProxy: byId("queueBtnProxy"),
+    drainQueueBtnProxy: byId("drainQueueBtnProxy"),
+    exportBtnProxy: byId("exportBtnProxy"),
+    importInputProxy: byId("importInputProxy")
   };
 
   let scenarioLibrary = deepClone(BASE_SCENARIOS);
@@ -349,6 +356,7 @@
     populateScenarioSelect();
     bindEvents();
     setupTabs();
+    setupProxyActions();
     setupStarfield();
     loadScenario(currentScenario.id);
   }
@@ -396,6 +404,42 @@
         if (panel) panel.classList.add("active");
       });
     });
+  }
+
+  function setupProxyActions() {
+    const pairs = [
+      ["runBtnProxy", "runBtn"],
+      ["stepBtnProxy", "stepBtn"],
+      ["resetBtnProxy", "resetBtn"],
+      ["queueBtnProxy", "queueBtn"],
+      ["drainQueueBtnProxy", "drainQueueBtn"],
+      ["exportBtnProxy", "exportBtn"]
+    ];
+
+    pairs.forEach(function ([proxyKey, realKey]) {
+      const proxy = els[proxyKey];
+      const real = els[realKey];
+      if (proxy && real) {
+        proxy.addEventListener("click", function () {
+          real.click();
+        });
+      }
+    });
+
+    if (els.importInputProxy && els.importInput) {
+      els.importInputProxy.addEventListener("change", function () {
+        if (!els.importInputProxy.files || !els.importInputProxy.files.length) return;
+
+        const dt = new DataTransfer();
+        Array.from(els.importInputProxy.files).forEach(function (file) {
+          dt.items.add(file);
+        });
+
+        els.importInput.files = dt.files;
+        els.importInput.dispatchEvent(new Event("change", { bubbles: true }));
+        els.importInputProxy.value = "";
+      });
+    }
   }
 
   function populateScenarioSelect() {
@@ -963,6 +1007,7 @@
         trace("Import failed: " + error.message);
       }
     };
+
     reader.readAsText(file);
     event.target.value = "";
   }
