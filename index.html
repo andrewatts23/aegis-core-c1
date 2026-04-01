@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AEGIS-CORE C1 — Complete Constitutional Compute Build</title>
+  <title>AEGIS-CORE C1 — Constitutional-Compute Reference Artifact</title>
   <meta
     name="description"
-    content="AEGIS-CORE C1 complete static simulator for admissibility, governed consequence, persistence supervision, governance-meaningful audit, policy editing, queue-driven scenario analysis, and controlled review."
+    content="AEGIS-CORE C1 static constitutional-compute reference artifact for admissibility, bounded consequence, continuity-governed persistence, and governance-meaningful audit."
   />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,24 +29,9 @@
         <div class="eyebrow">Continuity-Governed Admissibility Processor</div>
         <h1>AEGIS-CORE C1</h1>
         <p class="subline">
-          A complete static constitutional-compute experience for admissibility,
-          bounded consequence, persistence truth, governance-meaningful audit,
-          policy control, queueing, and adversarial review.
+          Static constitutional-compute reference artifact.
         </p>
       </div>
-    </div>
-
-    <div class="topbar-actions">
-      <button id="runBtn" class="btn btn-primary" type="button">Run</button>
-      <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
-      <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
-      <button id="queueBtn" class="btn btn-ghost" type="button">Queue Request</button>
-      <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain Queue</button>
-      <button id="exportBtn" class="btn btn-ghost" type="button">Export JSON</button>
-      <label class="btn btn-ghost file-btn">
-        Import JSON
-        <input id="importInput" type="file" accept="application/json" hidden />
-      </label>
     </div>
   </header>
 
@@ -54,37 +39,63 @@
     <section class="hero panel">
       <div class="hero-copy">
         <div class="hero-kicker">Not a dashboard. A governed reality engine.</div>
-        <h2>
-          Computation does not become real here until legitimacy has been earned.
-        </h2>
+        <h2>Computation does not become real here until legitimacy has been earned.</h2>
         <p>
           Requests enter through a governed boundary, move through explicit predicate
           scrutiny, resolve into admissibility, and either cross into bounded
           consequence or get denied, staged, downgraded, quarantined, terminated,
           or preserved for review. Persistence is then forced through support-set
-          truth instead of surviving by inertia. Queueing, policy controls, live
-          predicate editing, cadence simulation, and adversarial replay make the
-          architecture legible as constitutional order rather than surface animation.
+          truth instead of surviving by inertia.
         </p>
+
+        <div class="release-strip">
+          <span class="release-pill">Reference Build</span>
+          <span class="release-pill">Static Simulator</span>
+          <span class="release-pill">Public Review Layer</span>
+          <span class="release-pill">Not RTL / ASIC</span>
+        </div>
       </div>
 
-      <div class="hero-stats">
-        <article class="stat-card">
-          <span class="stat-label">Pipeline</span>
-          <strong>S0 → S11</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Predicates</span>
-          <strong>PF-01 → PF-16</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Queue Model</span>
-          <strong>Multi-Request</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Audit Doctrine</span>
-          <strong>Governance Meaning</strong>
-        </article>
+      <div class="hero-side">
+        <div class="hero-stats">
+          <article class="stat-card">
+            <span class="stat-label">Pipeline</span>
+            <strong>S0 → S11</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Predicates</span>
+            <strong>PF-01 → PF-16</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Queue Model</span>
+            <strong>Multi-Request</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Audit Doctrine</span>
+            <strong>Governance Meaning</strong>
+          </article>
+        </div>
+
+        <section class="panel hero-actions-panel">
+          <div class="panel-head compact-head">
+            <h3>Primary Actions</h3>
+            <span class="mono faint">Run the machine</span>
+          </div>
+          <div class="panel-body compact-body">
+            <div class="action-grid">
+              <button id="runBtn" class="btn btn-primary" type="button">Run</button>
+              <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
+              <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
+              <button id="queueBtn" class="btn btn-ghost" type="button">Queue</button>
+              <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain</button>
+              <button id="exportBtn" class="btn btn-ghost" type="button">Export</button>
+              <label class="btn btn-ghost file-btn import-btn">
+                Import
+                <input id="importInput" type="file" accept="application/json" hidden />
+              </label>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -134,7 +145,7 @@
 
             <label class="field full">
               <span>Scenario Thesis</span>
-              <textarea id="scenarioNarrative" rows="6"></textarea>
+              <textarea id="scenarioNarrative" rows="5"></textarea>
             </label>
           </div>
         </section>
@@ -348,7 +359,7 @@
   </main>
 
   <footer class="footer">
-    <span>AEGIS-CORE C1 complete static simulator baseline.</span>
+    <span>AEGIS-CORE C1 static simulator baseline.</span>
     <span class="mono faint">HTML • CSS • JavaScript • GitHub Pages ready</span>
   </footer>
 
