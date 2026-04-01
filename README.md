@@ -1,11 +1,11 @@
 # AEGIS-CORE C1
 
 **Continuity-Governed Admissibility Processor**  
-**Static constitutional-compute reference build**
+**Static constitutional-compute reference artifact**
 
 AEGIS-CORE C1 is a continuity-governed admissibility processor: a system designed to determine whether computation is permitted to become consequence-bearing reality.
 
-This repository is a **self-contained static simulator and reference model** for that architecture. It renders the processor as an inspectable browser artifact: governed pipeline, predicate evaluation, state ontology, continuity-led persistence review, disposition logic, and governance-meaningful audit. It is intended to make the architecture legible in a static environment, not to claim full RTL, ASIC, or production deployment.
+This repository is a self-contained static simulator and reference artifact for that architecture. It renders the processor as an inspectable browser build: governed pipeline, predicate evaluation, state ontology, continuity-led persistence review, disposition logic, and governance-meaningful audit. It is intended to make the architecture legible in a static environment, not to claim full RTL, ASIC, or production deployment.
 
 ## What this build shows
 
@@ -23,6 +23,24 @@ This repository is a **self-contained static simulator and reference model** for
 - adversarial test library
 - FPGA-aligned conceptual signal view
 - cadence-based persistence controls
+
+## How to read the artifact
+
+Start with the three canonical scenarios:
+
+1. **Scenario 01 — ALLOW**  
+   Valid authority, valid presence, valid commit, valid sequence, and valid persistence support. The machine permits bounded consequence and supervised persistence.
+
+2. **Scenario 02 — DENY**  
+   Authority and scope fail before consequence can form. The machine blocks effect formation and classifies the resulting state as invalid.
+
+3. **Scenario 03 — QUARANTINE**  
+   Replay / lineage / integrity ambiguity is isolated rather than flattened into false validity. The machine withholds consequence and places the path under quarantine.
+
+These three branches make the architecture legible:
+- admissible consequence
+- invalid authority denial
+- ambiguous lineage quarantine
 
 ## Why this exists
 
@@ -55,12 +73,12 @@ This repository is not:
 - an unrestricted commercialization grant
 - a waiver of authorship, rights reservation, or derivative boundaries
 
-## Repository structure
+## Files
 
-- `index.html` — main application shell
-- `styles.css` — visual system and layout
-- `app.js` — scenario engine, pipeline rendering, predicate and state logic, queueing, audit generation
-- `README.md` — repository overview
+- `index.html`
+- `styles.css`
+- `app.js`
+- `README.md`
 
 ## Run locally
 
@@ -79,8 +97,22 @@ Open `index.html` in a modern browser.
 5. Select your main branch and `/root`.
 6. Save.
 
-## Positioning statement
+## Notes
 
-AEGIS-CORE C1 should be understood here as a **constitutional-compute reference artifact**: a static, inspectable browser build that makes admissibility-governed state formation, continuity-governed persistence, bounded consequence, and governance-meaningful audit visible as a coherent, self-contained machine model.
+This is a visual proof-of-logic simulator, not an RTL or ASIC implementation.  
+It is designed to make the architecture legible in a static browser environment.
 
-This repository is not merely a demo page. It is a public-facing legibility layer for a constitutional-compute architecture.
+## Stability and usability fixes in this version
+
+- duplicate JavaScript function blocks removed
+- scenario state reset stabilized
+- queue drain logic corrected
+- safer cloning path added
+- import/export hardened
+- pipeline, ledger, and signal rendering normalized
+- audit record field naming clarified
+- mobile top section tightened
+- mobile action buttons normalized
+- oversized hero footprint reduced on phone
+- front-door interpretation path added
+- primary actions made more legible for first-time visitors
