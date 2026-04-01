@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AEGIS-CORE C1 — Complete Constitutional Compute Build</title>
+  <meta
+    name="description"
+    content="AEGIS-CORE C1 complete static simulator for admissibility, governed consequence, persistence supervision, governance-meaningful audit, policy editing, queue-driven scenario analysis, and controlled review."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="aurora aurora-a" aria-hidden="true"></div>
+  <div class="aurora aurora-b" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div class="brand-copy">
+        <div class="eyebrow">Continuity-Governed Admissibility Processor</div>
+        <h1>AEGIS-CORE C1</h1>
+        <p class="subline">
+          A complete static constitutional-compute experience for admissibility,
+          bounded consequence, persistence truth, governance-meaningful audit,
+          policy control, queueing, and adversarial review.
+        </p>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="runBtn" class="btn btn-primary" type="button">Run</button>
+      <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
+      <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
+      <button id="queueBtn" class="btn btn-ghost" type="button">Queue Request</button>
+      <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain Queue</button>
+      <button id="exportBtn" class="btn btn-ghost" type="button">Export JSON</button>
+      <label class="btn btn-ghost file-btn">
+        Import JSON
+        <input id="importInput" type="file" accept="application/json" hidden />
+      </label>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero panel">
+      <div class="hero-copy">
+        <div class="hero-kicker">Not a dashboard. A governed reality engine.</div>
+        <h2>
+          Computation does not become real here until legitimacy has been earned.
+        </h2>
+        <p>
+          Requests enter through a governed boundary, move through explicit predicate
+          scrutiny, resolve into admissibility, and either cross into bounded
+          consequence or get denied, staged, downgraded, quarantined, terminated,
+          or preserved for review. Persistence is then forced through support-set
+          truth instead of surviving by inertia. Queueing, policy controls, live
+          predicate editing, cadence simulation, and adversarial replay make the
+          architecture legible as constitutional order rather than surface animation.
+        </p>
+      </div>
+
+      <div class="hero-stats">
+        <article class="stat-card">
+          <span class="stat-label">Pipeline</span>
+          <strong>S0 → S11</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Predicates</span>
+          <strong>PF-01 → PF-16</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Queue Model</span>
+          <strong>Multi-Request</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Audit Doctrine</span>
+          <strong>Governance Meaning</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="left-rail">
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Scenario Control</h3>
+            <span class="pill accent">Complete Build</span>
+          </div>
+
+          <div class="panel-body form-grid">
+            <label class="field full">
+              <span>Scenario</span>
+              <select id="scenarioSelect"></select>
+            </label>
+
+            <label class="field">
+              <span>Playback Speed</span>
+              <input id="speedRange" type="range" min="250" max="1400" step="50" value="650" />
+            </label>
+
+            <label class="field">
+              <span>Mode Override</span>
+              <select id="modeSelect">
+                <option value="FULL_LEGITIMACY">FULL_LEGITIMACY</option>
+                <option value="DEGRADED_LEGITIMACY">DEGRADED_LEGITIMACY</option>
+                <option value="QUARANTINE_MODE">QUARANTINE_MODE</option>
+                <option value="EMERGENCY_PRESERVE_MODE">EMERGENCY_PRESERVE_MODE</option>
+                <option value="SAFE_HALT">SAFE_HALT</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Cadence Interval</span>
+              <input id="cadenceInput" type="number" min="1" step="1" value="15" />
+            </label>
+
+            <label class="field">
+              <span>Cadence Unit</span>
+              <select id="cadenceUnit">
+                <option value="seconds">seconds</option>
+                <option value="minutes">minutes</option>
+                <option value="cycles">cycles</option>
+              </select>
+            </label>
+
+            <label class="field full">
+              <span>Scenario Thesis</span>
+              <textarea id="scenarioNarrative" rows="6"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Editable Request Packet</h3>
+            <span class="mono faint">Ingress model</span>
+          </div>
+          <div id="requestEditor" class="panel-body request-editor"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Policy Profile</h3>
+            <span class="mono faint">Mutable controls</span>
+          </div>
+          <div id="policyEditor" class="panel-body policy-editor"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Decision Surface</h3>
+            <span id="reasonBadge" class="pill neutral">Awaiting run</span>
+          </div>
+
+          <div class="panel-body decision-grid">
+            <article class="decision-card">
+              <span class="tiny-label">Disposition</span>
+              <strong id="dispositionOut">—</strong>
+            </article>
+            <article class="decision-card">
+              <span class="tiny-label">Resulting State</span>
+              <strong id="stateOut">—</strong>
+            </article>
+            <article class="decision-card">
+              <span class="tiny-label">Audit Event</span>
+              <strong id="auditEventOut">—</strong>
+            </article>
+          </div>
+        </section>
+      </aside>
+
+      <section class="right-stage">
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Governance Pipeline</h3>
+            <div class="legend">
+              <span><i class="dot pending"></i>Pending</span>
+              <span><i class="dot active"></i>Active</span>
+              <span><i class="dot pass"></i>Resolved</span>
+              <span><i class="dot fail"></i>Blocked</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="pipelineGrid" class="pipeline-grid"></div>
+          </div>
+        </section>
+
+        <section class="two-column">
+          <section class="panel">
+            <div class="panel-head">
+              <h3>Predicate Matrix</h3>
+              <span class="mono faint">Live authoring enabled</span>
+            </div>
+            <div class="panel-body table-wrap">
+              <table class="predicate-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Predicate</th>
+                    <th>Owner</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                  </tr>
+                </thead>
+                <tbody id="predicateBody"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h3>State Constellation</h3>
+              <span class="mono faint">Machine-significant ontology</span>
+            </div>
+            <div class="panel-body">
+              <div id="stateGrid" class="state-grid"></div>
+              <div id="transitionNote" class="transition-note">
+                No transition has been evaluated yet.
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="three-column">
+          <section class="panel">
+            <div class="panel-head">
+              <h3>Continuity Ledger</h3>
+              <span class="mono faint">Support-set truth</span>
+            </div>
+            <div class="panel-body">
+              <div id="ledgerSummary" class="ledger-summary"></div>
+              <div id="supportGrid" class="support-grid"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h3>Request Queue</h3>
+              <span class="mono faint">Multi-request flow</span>
+            </div>
+            <div class="panel-body">
+              <div id="queueSummary" class="queue-summary">Queue depth: 0</div>
+              <ol id="queueList" class="queue-list"></ol>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <h3>FPGA-Aligned Signals</h3>
+              <span class="mono faint">Conceptual signal view</span>
+            </div>
+            <div class="panel-body">
+              <div id="signalGrid" class="signal-grid"></div>
+            </div>
+          </section>
+        </section>
+
+        <section class="tabs panel">
+          <div class="panel-head">
+            <h3>System Views</h3>
+            <div class="tab-row">
+              <button class="tab-btn active" data-tab="packetTab" type="button">Packet Anatomy</button>
+              <button class="tab-btn" data-tab="registerTab" type="button">Register Map</button>
+              <button class="tab-btn" data-tab="transitionTab" type="button">Transition Matrix</button>
+              <button class="tab-btn" data-tab="adversarialTab" type="button">Adversarial Library</button>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <section id="packetTab" class="tab-panel active">
+              <div id="packetView" class="packet-view"></div>
+            </section>
+
+            <section id="registerTab" class="tab-panel">
+              <div class="table-wrap">
+                <table class="predicate-table">
+                  <thead>
+                    <tr>
+                      <th>Address</th>
+                      <th>Name</th>
+                      <th>Access</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody id="registerBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section id="transitionTab" class="tab-panel">
+              <div class="table-wrap">
+                <table class="predicate-table transition-table">
+                  <thead>
+                    <tr>
+                      <th>From \ To</th>
+                      <th>Advisory</th>
+                      <th>Staged</th>
+                      <th>Executable</th>
+                      <th>Consequence</th>
+                      <th>Persistent</th>
+                      <th>Invalid</th>
+                      <th>Quarantined</th>
+                      <th>Terminated</th>
+                      <th>Review</th>
+                    </tr>
+                  </thead>
+                  <tbody id="transitionBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section id="adversarialTab" class="tab-panel">
+              <div id="adversarialList" class="adversarial-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Legitimacy Record</h3>
+            <span class="mono faint">Meaning, not mere chronology</span>
+          </div>
+          <div class="panel-body">
+            <pre id="auditRecord" class="audit-record">Run a scenario to generate the audit record.</pre>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Execution Trace</h3>
+            <span class="mono faint">Narrated event stream</span>
+          </div>
+          <div class="panel-body">
+            <ol id="traceList" class="trace-list"></ol>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>AEGIS-CORE C1 complete static simulator baseline.</span>
+    <span class="mono faint">HTML • CSS • JavaScript • GitHub Pages ready</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
