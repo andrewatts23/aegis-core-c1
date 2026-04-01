@@ -6,7 +6,7 @@
   <title>AEGIS-CORE C1 — Constitutional-Compute Reference Artifact</title>
   <meta
     name="description"
-    content="AEGIS-CORE C1 static constitutional-compute reference artifact for admissibility, bounded consequence, continuity-governed persistence, and governance-meaningful audit."
+    content="AEGIS-CORE C1 static constitutional-compute reference artifact for admissibility-governed state formation, bounded consequence, continuity-governed persistence, and governance-meaningful audit."
   />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,9 +29,24 @@
         <div class="eyebrow">Continuity-Governed Admissibility Processor</div>
         <h1>AEGIS-CORE C1</h1>
         <p class="subline">
-          Static constitutional-compute reference artifact.
+          Static constitutional-compute reference artifact for admissibility,
+          bounded consequence, continuity-governed persistence, and
+          governance-meaningful audit.
         </p>
       </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="runBtn" class="btn btn-primary" type="button">Run</button>
+      <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
+      <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
+      <button id="queueBtn" class="btn btn-ghost" type="button">Queue</button>
+      <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain</button>
+      <button id="exportBtn" class="btn btn-ghost" type="button">Export</button>
+      <label class="btn btn-ghost file-btn">
+        Import
+        <input id="importInput" type="file" accept="application/json" hidden />
+      </label>
     </div>
   </header>
 
@@ -39,7 +54,9 @@
     <section class="hero panel">
       <div class="hero-copy">
         <div class="hero-kicker">Not a dashboard. A governed reality engine.</div>
-        <h2>Computation does not become real here until legitimacy has been earned.</h2>
+        <h2>
+          Computation does not become real here until legitimacy has been earned.
+        </h2>
         <p>
           Requests enter through a governed boundary, move through explicit predicate
           scrutiny, resolve into admissibility, and either cross into bounded
@@ -47,56 +64,88 @@
           or preserved for review. Persistence is then forced through support-set
           truth instead of surviving by inertia.
         </p>
-
-        <div class="release-strip">
-          <span class="release-pill">Reference Build</span>
-          <span class="release-pill">Static Simulator</span>
-          <span class="release-pill">Public Review Layer</span>
-          <span class="release-pill">Not RTL / ASIC</span>
-        </div>
       </div>
 
-      <div class="hero-side">
-        <div class="hero-stats">
-          <article class="stat-card">
-            <span class="stat-label">Pipeline</span>
-            <strong>S0 → S11</strong>
-          </article>
-          <article class="stat-card">
-            <span class="stat-label">Predicates</span>
-            <strong>PF-01 → PF-16</strong>
-          </article>
-          <article class="stat-card">
-            <span class="stat-label">Queue Model</span>
-            <strong>Multi-Request</strong>
-          </article>
-          <article class="stat-card">
-            <span class="stat-label">Audit Doctrine</span>
-            <strong>Governance Meaning</strong>
-          </article>
-        </div>
-
-        <section class="panel hero-actions-panel">
-          <div class="panel-head compact-head">
-            <h3>Primary Actions</h3>
-            <span class="mono faint">Run the machine</span>
-          </div>
-          <div class="panel-body compact-body">
-            <div class="action-grid">
-              <button id="runBtn" class="btn btn-primary" type="button">Run</button>
-              <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
-              <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
-              <button id="queueBtn" class="btn btn-ghost" type="button">Queue</button>
-              <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain</button>
-              <button id="exportBtn" class="btn btn-ghost" type="button">Export</button>
-              <label class="btn btn-ghost file-btn import-btn">
-                Import
-                <input id="importInput" type="file" accept="application/json" hidden />
-              </label>
-            </div>
-          </div>
-        </section>
+      <div class="hero-stats">
+        <article class="stat-card">
+          <span class="stat-label">Pipeline</span>
+          <strong>S0 → S11</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Predicates</span>
+          <strong>PF-01 → PF-16</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Queue Model</span>
+          <strong>Multi-Request</strong>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Audit Doctrine</span>
+          <strong>Governance Meaning</strong>
+        </article>
       </div>
+    </section>
+
+    <section class="release-strip panel">
+      <div class="release-strip-inner">
+        <span class="pill accent">Reference Build</span>
+        <span class="pill neutral">Static Simulator</span>
+        <span class="pill neutral">Public Review Layer</span>
+        <span class="pill neutral">Not RTL / ASIC</span>
+      </div>
+    </section>
+
+    <section class="intro-grid">
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Start Here</h3>
+          <span class="mono faint">Interpretation path</span>
+        </div>
+        <div class="panel-body">
+          <div class="start-grid">
+            <article class="start-card">
+              <span class="tiny-label">Scenario 01</span>
+              <strong>ALLOW</strong>
+              <p>Valid authority, valid presence, valid commit, valid sequence, valid persistence support.</p>
+            </article>
+            <article class="start-card">
+              <span class="tiny-label">Scenario 02</span>
+              <strong>DENY</strong>
+              <p>Authority and scope fail before consequence can form.</p>
+            </article>
+            <article class="start-card">
+              <span class="tiny-label">Scenario 03</span>
+              <strong>QUARANTINE</strong>
+              <p>Replay / lineage / integrity ambiguity is isolated instead of treated as valid consequence.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Primary Actions</h3>
+          <span class="mono faint">Run the machine</span>
+        </div>
+        <div class="panel-body">
+          <div class="action-note">
+            Start with Scenario 01, then Scenario 02, then Scenario 03 to see the
+            three core constitutional branches: ALLOW, DENY, and QUARANTINE.
+          </div>
+          <div class="action-grid">
+            <button id="runBtnProxy" class="btn btn-primary" type="button">Run</button>
+            <button id="stepBtnProxy" class="btn btn-secondary" type="button">Step</button>
+            <button id="resetBtnProxy" class="btn btn-ghost" type="button">Reset</button>
+            <button id="queueBtnProxy" class="btn btn-ghost" type="button">Queue</button>
+            <button id="drainQueueBtnProxy" class="btn btn-ghost" type="button">Drain</button>
+            <button id="exportBtnProxy" class="btn btn-ghost" type="button">Export</button>
+            <label class="btn btn-ghost file-btn">
+              Import
+              <input id="importInputProxy" type="file" accept="application/json" hidden />
+            </label>
+          </div>
+        </div>
+      </section>
     </section>
 
     <section class="layout">
@@ -145,7 +194,7 @@
 
             <label class="field full">
               <span>Scenario Thesis</span>
-              <textarea id="scenarioNarrative" rows="5"></textarea>
+              <textarea id="scenarioNarrative" rows="6"></textarea>
             </label>
           </div>
         </section>
@@ -359,10 +408,48 @@
   </main>
 
   <footer class="footer">
-    <span>AEGIS-CORE C1 static simulator baseline.</span>
+    <span>AEGIS-CORE C1 constitutional-compute reference artifact.</span>
     <span class="mono faint">HTML • CSS • JavaScript • GitHub Pages ready</span>
   </footer>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const pairs = [
+        ["runBtnProxy", "runBtn"],
+        ["stepBtnProxy", "stepBtn"],
+        ["resetBtnProxy", "resetBtn"],
+        ["queueBtnProxy", "queueBtn"],
+        ["drainQueueBtnProxy", "drainQueueBtn"],
+        ["exportBtnProxy", "exportBtn"]
+      ];
+
+      pairs.forEach(function ([proxyId, realId]) {
+        const proxy = document.getElementById(proxyId);
+        const real = document.getElementById(realId);
+        if (proxy && real) {
+          proxy.addEventListener("click", function () {
+            real.click();
+          });
+        }
+      });
+
+      const importProxy = document.getElementById("importInputProxy");
+      const importReal = document.getElementById("importInput");
+      if (importProxy && importReal) {
+        importProxy.addEventListener("change", function () {
+          if (importProxy.files && importProxy.files.length) {
+            const dt = new DataTransfer();
+            Array.from(importProxy.files).forEach(function (file) {
+              dt.items.add(file);
+            });
+            importReal.files = dt.files;
+            importReal.dispatchEvent(new Event("change", { bubbles: true }));
+            importProxy.value = "";
+          }
+        });
+      }
+    });
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
