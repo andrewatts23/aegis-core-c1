@@ -145,6 +145,7 @@ h1 {
   margin-top: 4px;
   color: var(--muted);
   font-size: 13px;
+  line-height: 1.45;
 }
 
 .topbar-actions {
@@ -286,6 +287,8 @@ h1 {
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .btn:hover {
@@ -369,6 +372,8 @@ input[type="number"] {
   color: var(--text);
   padding: 12px;
   font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 textarea {
@@ -831,24 +836,134 @@ input[type="range"] {
   .adversarial-item {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 640px) {
+  .topbar {
+    padding: 14px 16px;
+    gap: 14px;
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .brand-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    font-size: 24px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+
+  .subline {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .btn,
+  .file-btn {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 14px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
   .shell {
     padding: 14px;
   }
 
   .hero {
-    padding: 22px;
+    padding: 18px;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .hero-kicker {
+    margin-bottom: 8px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .hero h2 {
+    font-size: 28px;
+    line-height: 1.05;
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .stat-card strong {
+    font-size: 16px;
+    margin-top: 4px;
+  }
+
+  .stat-label {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 640px) {
+  .shell {
+    padding: 12px;
+  }
+
+  .hero {
+    padding: 16px;
   }
 
   .pipeline-grid,
-  .state-grid {
+  .state-grid,
+  .hero-stats,
+  .topbar-actions {
     grid-template-columns: 1fr;
   }
 
   .queue-list li,
   .trace-list li {
     grid-template-columns: 1fr;
+  }
+
+  .hero h2 {
+    font-size: 24px;
+  }
+
+  .hero p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .btn,
+  .file-btn {
+    padding: 9px 11px;
+    font-size: 13px;
   }
 }
