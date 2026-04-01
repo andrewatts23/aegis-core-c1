@@ -160,7 +160,7 @@
         "PF-06": ["pass", "Freshness interval satisfied."],
         "PF-07": ["pass", "Commit scope aligns with action and target."],
         "PF-08": ["pass", "Sequence monotonic and workflow-consistent."],
-        "PF-09": ["pass", "Timing valid; no bounded suspend posture required."],
+        "PF-09": ["pass", "Clock source itself is valid."],
         "PF-10": ["pass", "Peer semantics compatible across authority, audit, and persistence dimensions."],
         "PF-11": ["pass", "No parent-state conflict exists."],
         "PF-12": ["pass", "Support set sufficient for continuity initialization."],
@@ -212,7 +212,7 @@
         "PF-06": ["pass", "Freshness window valid."],
         "PF-07": ["fail", "Commit scope cannot expand invalid authority."],
         "PF-08": ["pass", "Sequence valid."],
-        "PF-09": ["pass", "Timing valid."],
+        "PF-09": ["pass", "Clock source itself is valid."],
         "PF-10": ["pass", "Reciprocity not blocking."],
         "PF-11": ["pass", "No parent dependency conflict."],
         "PF-12": ["fail", "Persistence support impossible while authority is invalid."],
@@ -451,8 +451,8 @@
 
   function runScenario() {
     if (runTimer !== null) return;
-    const delay = Number(els.speedRange.value);
 
+    const delay = Number(els.speedRange.value);
     runTimer = window.setInterval(function () {
       const finished = stepScenario();
       if (finished) stopTimer();
@@ -602,16 +602,19 @@
       wrapper.className = "policy-field";
       const selectedTrue = currentScenario.policies[key] ? 'selected="selected"' : "";
       const selectedFalse = currentScenario.policies[key] ? "" : 'selected="selected"';
+
       wrapper.innerHTML =
         '<label for="policy-' + escapeAttribute(key) + '">' + escapeHtml(label) + "</label>" +
         '<select id="policy-' + escapeAttribute(key) + '">' +
         '<option value="true" ' + selectedTrue + ">true</option>" +
         '<option value="false" ' + selectedFalse + ">false</option>" +
         "</select>";
+
       const select = wrapper.querySelector("select");
       select.addEventListener("change", function () {
         currentScenario.policies[key] = select.value === "true";
       });
+
       els.policyEditor.appendChild(wrapper);
     });
   }
@@ -646,7 +649,7 @@
 
       const row = document.createElement("tr");
       row.innerHTML =
-        "<td class=\"mono\">" + escapeHtml(id) + "</td>" +
+        '<td class="mono">' + escapeHtml(id) + "</td>" +
         "<td>" + escapeHtml(name) + "</td>" +
         "<td>" + escapeHtml(owner) + "</td>" +
         '<td><span class="status-pill ' + escapeHtml(status) + '">' + escapeHtml(status) + "</span></td>" +
@@ -681,6 +684,7 @@
       els.ledgerSummary.textContent =
         "Continuity truth is not presumed. The support set remains pending until admissibility and resulting state posture have been resolved.";
       els.supportGrid.innerHTML = "";
+
       Object.keys(currentScenario.supportSet).forEach(function (key) {
         const card = document.createElement("div");
         card.className = "support-card";
@@ -798,9 +802,11 @@
         '<div class="mono">' + escapeHtml(name) + "</div>" +
         '<div class="mono faint">test</div>' +
         "<div>" + escapeHtml(desc) + "</div>";
+
       item.addEventListener("click", function () {
         trace("Adversarial library selected: " + name + ".");
       });
+
       els.adversarialList.appendChild(item);
     });
   }
@@ -824,7 +830,9 @@
       Presence_Status: safePredicateStatus("PF-04"),
       Commit_ID: currentScenario.request.Commit_ID,
       Commit_Status: safePredicateStatus("PF-05"),
-      Timing_Window_Status: safePredicateStatus("PF-09"),
+      Commit_Freshness_Status: safePredicateStatus("PF-06"),
+      Commit_Sequence_Status: safePredicateStatus("PF-08"),
+      Clock_Timing_Status: safePredicateStatus("PF-09"),
       Reciprocity_Required: currentScenario.request.Flags.indexOf("Reciprocity_Required") !== -1,
       Reciprocity_Status: safePredicateStatus("PF-10"),
       Parent_Dependency_Status: safePredicateStatus("PF-11"),
