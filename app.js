@@ -330,14 +330,7 @@
     queueBtn: byId("queueBtn"),
     drainQueueBtn: byId("drainQueueBtn"),
     exportBtn: byId("exportBtn"),
-    importInput: byId("importInput"),
-    runBtnProxy: byId("runBtnProxy"),
-    stepBtnProxy: byId("stepBtnProxy"),
-    resetBtnProxy: byId("resetBtnProxy"),
-    queueBtnProxy: byId("queueBtnProxy"),
-    drainQueueBtnProxy: byId("drainQueueBtnProxy"),
-    exportBtnProxy: byId("exportBtnProxy"),
-    importInputProxy: byId("importInputProxy")
+    importInput: byId("importInput")
   };
 
   let scenarioLibrary = deepClone(BASE_SCENARIOS);
@@ -356,7 +349,6 @@
     populateScenarioSelect();
     bindEvents();
     setupTabs();
-    setupProxyActions();
     setupStarfield();
     loadScenario(currentScenario.id);
   }
@@ -404,42 +396,6 @@
         if (panel) panel.classList.add("active");
       });
     });
-  }
-
-  function setupProxyActions() {
-    const pairs = [
-      ["runBtnProxy", "runBtn"],
-      ["stepBtnProxy", "stepBtn"],
-      ["resetBtnProxy", "resetBtn"],
-      ["queueBtnProxy", "queueBtn"],
-      ["drainQueueBtnProxy", "drainQueueBtn"],
-      ["exportBtnProxy", "exportBtn"]
-    ];
-
-    pairs.forEach(function ([proxyKey, realKey]) {
-      const proxy = els[proxyKey];
-      const real = els[realKey];
-      if (proxy && real) {
-        proxy.addEventListener("click", function () {
-          real.click();
-        });
-      }
-    });
-
-    if (els.importInputProxy && els.importInput) {
-      els.importInputProxy.addEventListener("change", function () {
-        if (!els.importInputProxy.files || !els.importInputProxy.files.length) return;
-
-        const dt = new DataTransfer();
-        Array.from(els.importInputProxy.files).forEach(function (file) {
-          dt.items.add(file);
-        });
-
-        els.importInput.files = dt.files;
-        els.importInput.dispatchEvent(new Event("change", { bubbles: true }));
-        els.importInputProxy.value = "";
-      });
-    }
   }
 
   function populateScenarioSelect() {
@@ -519,9 +475,7 @@
     updatePipelineVisuals(stageCursor);
     narrateStage(stageCursor);
 
-    if (stageCursor === 7) {
-      renderPredicates(true);
-    }
+    if (stageCursor === 7) renderPredicates(true);
 
     if (stageCursor === 9) {
       renderStateGrid(currentScenario.stateBefore, currentScenario.stateAfter);
@@ -534,9 +488,7 @@
         ". State class remains machine-significant; the architecture refuses to flatten truth into a coarse valid/invalid mask.";
     }
 
-    if (stageCursor === 10) {
-      renderLedger(true);
-    }
+    if (stageCursor === 10) renderLedger(true);
 
     if (stageCursor === 11) {
       finalizeScenario();
@@ -701,9 +653,7 @@
 
       const reasonCell = row.querySelector("[data-predicate]");
       reasonCell.addEventListener("input", function () {
-        if (!currentScenario.predicates[id]) {
-          currentScenario.predicates[id] = ["pending", ""];
-        }
+        if (!currentScenario.predicates[id]) currentScenario.predicates[id] = ["pending", ""];
         currentScenario.predicates[id][1] = reasonCell.textContent || "";
       });
 
