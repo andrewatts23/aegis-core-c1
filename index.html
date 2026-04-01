@@ -35,19 +35,6 @@
         </p>
       </div>
     </div>
-
-    <div class="topbar-actions">
-      <button id="runBtn" class="btn btn-primary" type="button">Run</button>
-      <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
-      <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
-      <button id="queueBtn" class="btn btn-ghost" type="button">Queue</button>
-      <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain</button>
-      <button id="exportBtn" class="btn btn-ghost" type="button">Export</button>
-      <label class="btn btn-ghost file-btn">
-        Import
-        <input id="importInput" type="file" accept="application/json" hidden />
-      </label>
-    </div>
   </header>
 
   <main class="shell">
@@ -133,15 +120,15 @@
             three core constitutional branches: ALLOW, DENY, and QUARANTINE.
           </div>
           <div class="action-grid">
-            <button id="runBtnProxy" class="btn btn-primary" type="button">Run</button>
-            <button id="stepBtnProxy" class="btn btn-secondary" type="button">Step</button>
-            <button id="resetBtnProxy" class="btn btn-ghost" type="button">Reset</button>
-            <button id="queueBtnProxy" class="btn btn-ghost" type="button">Queue</button>
-            <button id="drainQueueBtnProxy" class="btn btn-ghost" type="button">Drain</button>
-            <button id="exportBtnProxy" class="btn btn-ghost" type="button">Export</button>
+            <button id="runBtn" class="btn btn-primary" type="button">Run</button>
+            <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
+            <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
+            <button id="queueBtn" class="btn btn-ghost" type="button">Queue</button>
+            <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain</button>
+            <button id="exportBtn" class="btn btn-ghost" type="button">Export</button>
             <label class="btn btn-ghost file-btn">
               Import
-              <input id="importInputProxy" type="file" accept="application/json" hidden />
+              <input id="importInput" type="file" accept="application/json" hidden />
             </label>
           </div>
         </div>
@@ -412,44 +399,6 @@
     <span class="mono faint">HTML • CSS • JavaScript • GitHub Pages ready</span>
   </footer>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const pairs = [
-        ["runBtnProxy", "runBtn"],
-        ["stepBtnProxy", "stepBtn"],
-        ["resetBtnProxy", "resetBtn"],
-        ["queueBtnProxy", "queueBtn"],
-        ["drainQueueBtnProxy", "drainQueueBtn"],
-        ["exportBtnProxy", "exportBtn"]
-      ];
-
-      pairs.forEach(function ([proxyId, realId]) {
-        const proxy = document.getElementById(proxyId);
-        const real = document.getElementById(realId);
-        if (proxy && real) {
-          proxy.addEventListener("click", function () {
-            real.click();
-          });
-        }
-      });
-
-      const importProxy = document.getElementById("importInputProxy");
-      const importReal = document.getElementById("importInput");
-      if (importProxy && importReal) {
-        importProxy.addEventListener("change", function () {
-          if (importProxy.files && importProxy.files.length) {
-            const dt = new DataTransfer();
-            Array.from(importProxy.files).forEach(function (file) {
-              dt.items.add(file);
-            });
-            importReal.files = dt.files;
-            importReal.dispatchEvent(new Event("change", { bubbles: true }));
-            importProxy.value = "";
-          }
-        });
-      }
-    });
-  </script>
   <script src="app.js"></script>
 </body>
 </html>
