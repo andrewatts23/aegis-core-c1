@@ -8,7 +8,7 @@
     name="description"
     content="AEGIS-CORE C1 browser adjudication reference runtime for public technical review. Implements the packet’s normative decision order in browser reference-runtime form, including live predicate evaluation, disposition resolution, resulting state classification, continuity review, and governance-meaningful audit."
   />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=10" />
 </head>
 <body>
   <canvas id="starfield" aria-hidden="true"></canvas>
@@ -156,12 +156,7 @@
           </div>
 
           <div class="runtime-script-status-row">
-            <div
-              id="runtimeScriptStatus"
-              class="runtime-script-status neutral"
-              aria-live="polite"
-              aria-atomic="true"
-            >
+            <div id="runtimeScriptStatus" class="runtime-script-status neutral" aria-live="polite" aria-atomic="true">
               Awaiting parse.
             </div>
           </div>
@@ -170,6 +165,7 @@
             <div class="runtime-script-help-title">Accepted Forms</div>
             <ul class="runtime-script-help-list">
               <li><span class="mono">MODE=FULL_LEGITIMACY</span></li>
+              <li><span class="mono">NARRATIVE=...</span></li>
               <li><span class="mono">REQUEST.FieldName=value</span></li>
               <li><span class="mono">ENV.FieldName=value</span></li>
               <li><span class="mono">POLICY.FieldName=true|false</span></li>
@@ -179,10 +175,10 @@
         </div>
       </section>
 
-      <section class="panel" id="requestPanel" aria-labelledby="requestPanelHeading">
+      <section class="panel" id="requestPanel" aria-labelledby="requestHeading">
         <div class="panel-head">
           <div>
-            <h2 id="requestPanelHeading">Request Packet Editor</h2>
+            <h2 id="requestHeading">Request Packet Editor</h2>
             <p class="panel-subtitle">
               Live request fields used by the browser adjudication reference runtime.
             </p>
@@ -191,10 +187,10 @@
         <div id="requestEditor" class="panel-body request-editor"></div>
       </section>
 
-      <section class="panel" id="policyPanel" aria-labelledby="policyPanelHeading">
+      <section class="panel" id="policyPanel" aria-labelledby="policyHeading">
         <div class="panel-head">
           <div>
-            <h2 id="policyPanelHeading">Policy Profile</h2>
+            <h2 id="policyHeading">Policy Profile</h2>
             <p class="panel-subtitle">
               Active boolean control surface affecting admissibility behavior in the browser runtime.
             </p>
@@ -203,10 +199,10 @@
         <div id="policyEditor" class="panel-body policy-editor"></div>
       </section>
 
-      <section class="panel" id="decisionPanel" aria-labelledby="decisionPanelHeading">
+      <section class="panel" id="decisionPanel" aria-labelledby="decisionHeading">
         <div class="panel-head">
           <div>
-            <h2 id="decisionPanelHeading">Decision Surface</h2>
+            <h2 id="decisionHeading">Decision Surface</h2>
             <p class="panel-subtitle">
               Live disposition, resulting state, event class, and primary governing reason.
             </p>
@@ -236,10 +232,10 @@
         </div>
       </section>
 
-      <section class="panel" id="pipelinePanel" aria-labelledby="pipelinePanelHeading">
+      <section class="panel" id="pipelinePanel" aria-labelledby="pipelineHeading">
         <div class="panel-head">
           <div>
-            <h2 id="pipelinePanelHeading">Normative Decision Order</h2>
+            <h2 id="pipelineHeading">Normative Decision Order</h2>
             <p class="panel-subtitle">
               Public browser implementation of the packet’s normative decision order in browser reference-runtime form.
             </p>
@@ -248,131 +244,29 @@
         <div id="pipelineGrid" class="panel-body pipeline-grid"></div>
       </section>
 
-      <section class="panel" id="analysisPanel" aria-labelledby="analysisPanelHeading">
+      <section class="panel" id="analysisPanel" aria-labelledby="analysisHeading">
         <div class="panel-head tabs-head">
           <div>
-            <h2 id="analysisPanelHeading">Analysis Views</h2>
+            <h2 id="analysisHeading">Analysis Views</h2>
             <p class="panel-subtitle">
               Input-driven predicates, resulting state, continuity review, conceptual packet / register views, and adversarial presets.
             </p>
           </div>
 
           <div class="tabs" role="tablist" aria-label="Analysis views">
-            <button
-              id="analysis-predicates-tab"
-              class="tab-btn active"
-              data-tab="tab-predicates"
-              type="button"
-              role="tab"
-              aria-selected="true"
-              aria-controls="tab-predicates"
-              tabindex="0"
-            >
-              Predicates
-            </button>
-
-            <button
-              id="analysis-states-tab"
-              class="tab-btn"
-              data-tab="tab-states"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-states"
-              tabindex="-1"
-            >
-              States
-            </button>
-
-            <button
-              id="analysis-ledger-tab"
-              class="tab-btn"
-              data-tab="tab-ledger"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-ledger"
-              tabindex="-1"
-            >
-              Continuity
-            </button>
-
-            <button
-              id="analysis-signals-tab"
-              class="tab-btn"
-              data-tab="tab-signals"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-signals"
-              tabindex="-1"
-            >
-              Signals
-            </button>
-
-            <button
-              id="analysis-packet-tab"
-              class="tab-btn"
-              data-tab="tab-packet"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-packet"
-              tabindex="-1"
-            >
-              Packet
-            </button>
-
-            <button
-              id="analysis-registers-tab"
-              class="tab-btn"
-              data-tab="tab-registers"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-registers"
-              tabindex="-1"
-            >
-              Registers
-            </button>
-
-            <button
-              id="analysis-transitions-tab"
-              class="tab-btn"
-              data-tab="tab-transitions"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-transitions"
-              tabindex="-1"
-            >
-              Transitions
-            </button>
-
-            <button
-              id="analysis-adversarial-tab"
-              class="tab-btn"
-              data-tab="tab-adversarial"
-              type="button"
-              role="tab"
-              aria-selected="false"
-              aria-controls="tab-adversarial"
-              tabindex="-1"
-            >
-              Adversarial
-            </button>
+            <button id="analysis-predicates-tab" class="tab-btn active" data-tab="tab-predicates" type="button" role="tab" aria-selected="true" aria-controls="tab-predicates" tabindex="0">Predicates</button>
+            <button id="analysis-states-tab" class="tab-btn" data-tab="tab-states" type="button" role="tab" aria-selected="false" aria-controls="tab-states" tabindex="-1">States</button>
+            <button id="analysis-ledger-tab" class="tab-btn" data-tab="tab-ledger" type="button" role="tab" aria-selected="false" aria-controls="tab-ledger" tabindex="-1">Continuity</button>
+            <button id="analysis-signals-tab" class="tab-btn" data-tab="tab-signals" type="button" role="tab" aria-selected="false" aria-controls="tab-signals" tabindex="-1">Signals</button>
+            <button id="analysis-packet-tab" class="tab-btn" data-tab="tab-packet" type="button" role="tab" aria-selected="false" aria-controls="tab-packet" tabindex="-1">Packet</button>
+            <button id="analysis-registers-tab" class="tab-btn" data-tab="tab-registers" type="button" role="tab" aria-selected="false" aria-controls="tab-registers" tabindex="-1">Registers</button>
+            <button id="analysis-transitions-tab" class="tab-btn" data-tab="tab-transitions" type="button" role="tab" aria-selected="false" aria-controls="tab-transitions" tabindex="-1">Transitions</button>
+            <button id="analysis-adversarial-tab" class="tab-btn" data-tab="tab-adversarial" type="button" role="tab" aria-selected="false" aria-controls="tab-adversarial" tabindex="-1">Adversarial</button>
           </div>
         </div>
 
         <div class="panel-body tab-wrap">
-          <section
-            id="tab-predicates"
-            class="tab-panel active"
-            role="tabpanel"
-            aria-labelledby="analysis-predicates-tab"
-            tabindex="0"
-            aria-hidden="false"
-          >
+          <section id="tab-predicates" class="tab-panel active" role="tabpanel" aria-labelledby="analysis-predicates-tab" aria-hidden="false" tabindex="0">
             <div class="table-wrap">
               <table>
                 <thead>
@@ -389,62 +283,25 @@
             </div>
           </section>
 
-          <section
-            id="tab-states"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-states-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-states" class="tab-panel" role="tabpanel" aria-labelledby="analysis-states-tab" aria-hidden="true" tabindex="-1">
             <div id="stateGrid" class="state-grid"></div>
-            <div id="transitionNote" class="transition-note">
-              No governed transition has been executed yet.
-            </div>
+            <div id="transitionNote" class="transition-note">No governed transition has been executed yet.</div>
           </section>
 
-          <section
-            id="tab-ledger"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-ledger-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-ledger" class="tab-panel" role="tabpanel" aria-labelledby="analysis-ledger-tab" aria-hidden="true" tabindex="-1">
             <div id="ledgerSummary" class="ledger-summary"></div>
             <div id="supportGrid" class="support-grid"></div>
           </section>
 
-          <section
-            id="tab-signals"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-signals-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-signals" class="tab-panel" role="tabpanel" aria-labelledby="analysis-signals-tab" aria-hidden="true" tabindex="-1">
             <div id="signalGrid" class="signal-grid"></div>
           </section>
 
-          <section
-            id="tab-packet"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-packet-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-packet" class="tab-panel" role="tabpanel" aria-labelledby="analysis-packet-tab" aria-hidden="true" tabindex="-1">
             <div id="packetView" class="packet-view"></div>
           </section>
 
-          <section
-            id="tab-registers"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-registers-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-registers" class="tab-panel" role="tabpanel" aria-labelledby="analysis-registers-tab" aria-hidden="true" tabindex="-1">
             <div class="table-wrap">
               <table>
                 <thead>
@@ -460,14 +317,7 @@
             </div>
           </section>
 
-          <section
-            id="tab-transitions"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-transitions-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-transitions" class="tab-panel" role="tabpanel" aria-labelledby="analysis-transitions-tab" aria-hidden="true" tabindex="-1">
             <div class="table-wrap">
               <table>
                 <thead>
@@ -489,87 +339,64 @@
             </div>
           </section>
 
-          <section
-            id="tab-adversarial"
-            class="tab-panel"
-            role="tabpanel"
-            aria-labelledby="analysis-adversarial-tab"
-            tabindex="-1"
-            aria-hidden="true"
-          >
+          <section id="tab-adversarial" class="tab-panel" role="tabpanel" aria-labelledby="analysis-adversarial-tab" aria-hidden="true" tabindex="-1">
             <div id="adversarialList" class="adversarial-list"></div>
           </section>
         </div>
       </section>
 
-      <section class="panel split-panel" id="recordTracePanel" aria-labelledby="recordTraceSectionHeading">
-        <div class="visually-hidden">
-          <h2 id="recordTraceSectionHeading">Audit Record and Execution Trace</h2>
-        </div>
+      <section class="panel split-panel" id="recordTracePanel" aria-labelledby="recordTraceHeading">
+        <h2 id="recordTraceHeading" class="visually-hidden">Audit Record and Execution Trace</h2>
 
         <div class="split-col">
           <div class="panel-head">
             <div>
-              <h2 id="auditRecordHeading">Governance-Meaningful Audit Record</h2>
-              <p class="panel-subtitle">
-                Live browser audit artifact generated from current adjudication state.
-              </p>
+              <h2>Governance-Meaningful Audit Record</h2>
+              <p class="panel-subtitle">Live browser audit artifact generated from current adjudication state.</p>
             </div>
           </div>
           <div class="panel-body">
-            <pre
-              id="auditRecord"
-              class="audit-record"
-              aria-labelledby="auditRecordHeading"
-            >Run a scenario to generate the computed legitimacy record.</pre>
+            <pre id="auditRecord" class="audit-record">Run a scenario to generate the computed legitimacy record.</pre>
           </div>
         </div>
 
         <div class="split-col">
           <div class="panel-head">
             <div>
-              <h2 id="tracePanelHeading">Execution Trace</h2>
-              <p class="panel-subtitle">
-                Live runtime narration across decision stages and predicate families.
-              </p>
+              <h2>Execution Trace</h2>
+              <p class="panel-subtitle">Live runtime narration across decision stages and predicate families.</p>
             </div>
           </div>
           <div class="panel-body trace-wrap">
-            <ul id="traceList" class="trace-list" aria-labelledby="tracePanelHeading"></ul>
+            <ul id="traceList" class="trace-list"></ul>
           </div>
         </div>
       </section>
 
-      <section class="panel split-panel" id="queueNotesPanel" aria-labelledby="queueNotesSectionHeading">
-        <div class="visually-hidden">
-          <h2 id="queueNotesSectionHeading">Queued Snapshots and Public Review Notes</h2>
-        </div>
+      <section class="panel split-panel" id="queueNotesPanel" aria-labelledby="queueNotesHeading">
+        <h2 id="queueNotesHeading" class="visually-hidden">Queued Snapshots and Public Review Notes</h2>
 
         <div class="split-col">
           <div class="panel-head">
             <div>
-              <h2 id="queueHeading">Queued Snapshots</h2>
-              <p class="panel-subtitle">
-                Stored scenario snapshots for repeated review and drain-back execution.
-              </p>
+              <h2>Queued Snapshots</h2>
+              <p class="panel-subtitle">Stored scenario snapshots for repeated review and drain-back execution.</p>
             </div>
           </div>
           <div class="panel-body">
-            <div id="queueSummary" class="queue-summary" aria-labelledby="queueHeading">Queue depth: 0</div>
-            <ul id="queueList" class="queue-list" aria-labelledby="queueHeading"></ul>
+            <div id="queueSummary" class="queue-summary">Queue depth: 0</div>
+            <ul id="queueList" class="queue-list"></ul>
           </div>
         </div>
 
         <div class="split-col">
           <div class="panel-head">
             <div>
-              <h2 id="publicNotesHeading">Public Review Notes</h2>
-              <p class="panel-subtitle">
-                Scope statements for the browser artifact and its relationship to the canonical packet.
-              </p>
+              <h2>Public Review Notes</h2>
+              <p class="panel-subtitle">Scope statements for the browser artifact and its relationship to the canonical packet.</p>
             </div>
           </div>
-          <div class="panel-body notes" aria-labelledby="publicNotesHeading">
+          <div class="panel-body notes">
             <p>
               This artifact is a live browser adjudication reference runtime for public technical review.
               It implements the packet’s normative decision order in browser reference-runtime form.
@@ -588,6 +415,6 @@
     </main>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
