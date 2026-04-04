@@ -1,375 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AEGIS-CORE C1 — Browser Adjudication Reference Runtime</title>
   <meta
     name="description"
-    content="AEGIS-CORE C1 browser adjudication reference runtime for admissibility-governed state formation, bounded consequence, continuity-governed persistence, and governance-meaningful audit."
-  />
-  <meta name="theme-color" content="#040814" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet"
+    content="AEGIS-CORE C1 browser adjudication reference runtime for public technical review. Implements packet decision order, live predicate evaluation, disposition resolution, resulting state classification, continuity review, and governance-meaningful audit in a browser surface."
   />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <canvas id="starfield" aria-hidden="true"></canvas>
-  <div class="aurora aurora-a" aria-hidden="true"></div>
-  <div class="aurora aurora-b" aria-hidden="true"></div>
-  <div class="grid-overlay" aria-hidden="true"></div>
 
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">A</div>
-      <div class="brand-copy">
-        <div class="eyebrow">Continuity-Governed Admissibility Processor</div>
-        <h1>AEGIS-CORE C1</h1>
-        <p class="subline">
-          Browser adjudication reference runtime for admissibility, bounded consequence,
-          continuity-governed persistence, and governance-meaningful audit.
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero-main">
+        <div class="eyebrow mono">AEGIS-CORE C1 · PUBLIC TECHNICAL REVIEW BUILD</div>
+        <h1>Browser Adjudication Reference Runtime</h1>
+        <p class="hero-copy">
+          AEGIS-CORE C1 is presented here as a browser adjudication reference runtime
+          implementing the packet’s normative decision order, live predicate evaluation,
+          disposition resolution, resulting state classification, continuity review, and
+          governance-meaningful audit in a public technical review surface.
         </p>
       </div>
-    </div>
-  </header>
 
-  <main class="shell">
-    <section class="hero panel">
-      <div class="hero-copy">
-        <div class="hero-kicker">Not a dashboard. A governed adjudication runtime.</div>
-        <h2>Computation does not become real here until legitimacy has been earned.</h2>
+      <aside class="hero-boundary-card" aria-label="Public runtime scope boundary">
+        <div class="hero-boundary-title mono">Public Scope Boundary</div>
         <p>
-          This build presents AEGIS-CORE C1 as a public browser runtime in which editable
-          request, policy, evaluation-context, and structured runtime script inputs drive
-          predicate computation, disposition resolution, state transition posture,
-          continuity review, and a governance-meaningful legitimacy record.
+          This build is input-driven. It is not a hardcoded playback demo.
+          It is not the FPGA or ASIC realization profile itself.
         </p>
-
-        <div class="hero-boundary">
-          <span class="pill accent">Build 1</span>
-          <span class="pill neutral">Live Predicate Runtime</span>
-          <span class="pill neutral">Structured Script Input</span>
-          <span class="pill neutral">Not RTL / ASIC / Fabrication</span>
-        </div>
-      </div>
-
-      <div class="hero-stats">
-        <article class="stat-card">
-          <span class="stat-label">Pipeline</span>
-          <strong>S0 → S11</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Predicates</span>
-          <strong>PF-01 → PF-16</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Runtime Truth</span>
-          <strong>Input-Driven</strong>
-        </article>
-        <article class="stat-card">
-          <span class="stat-label">Reviewer Surface</span>
-          <strong>Script + Forms</strong>
-        </article>
-      </div>
-    </section>
-
-    <section class="release-strip panel">
-      <div class="release-strip-inner">
-        <span class="pill accent">Reference Build</span>
-        <span class="pill neutral">Browser Adjudication Runtime</span>
-        <span class="pill neutral">Live Structured Script Input</span>
-        <span class="pill neutral">Public Technical Review</span>
-      </div>
-    </section>
-
-    <section class="intro-grid">
-      <section class="panel">
-        <div class="panel-head">
-          <h3>Start Here</h3>
-          <span class="mono faint">Interpretation path</span>
-        </div>
-        <div class="panel-body">
-          <div class="start-grid">
-            <article class="start-card">
-              <span class="tiny-label">Scenario 01</span>
-              <strong>ALLOW</strong>
-              <p>
-                Valid authority, valid presence, authentic commit, monotonic sequence,
-                and sufficient continuity support.
-              </p>
-            </article>
-
-            <article class="start-card">
-              <span class="tiny-label">Scenario 02</span>
-              <strong>DENY</strong>
-              <p>
-                Authority and scope fail before consequence can form.
-              </p>
-            </article>
-
-            <article class="start-card">
-              <span class="tiny-label">Scenario 03</span>
-              <strong>QUARANTINE</strong>
-              <p>
-                Replay, freshness, or integrity ambiguity is isolated instead of
-                flattened into false validity.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <h3>Primary Actions</h3>
-          <span class="mono faint">Run the machine</span>
-        </div>
-        <div class="panel-body">
-          <div class="action-note">
-            You can review this build in two ways: edit the live forms directly, or edit
-            the structured runtime script and apply it into the engine before running.
-          </div>
-
-          <div class="action-grid">
-            <button id="runBtn" class="btn btn-primary" type="button">Run</button>
-            <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
-            <button id="resetBtn" class="btn btn-ghost" type="button">Reset</button>
-            <button id="queueBtn" class="btn btn-ghost" type="button">Queue</button>
-            <button id="drainQueueBtn" class="btn btn-ghost" type="button">Drain</button>
-            <button id="exportBtn" class="btn btn-ghost" type="button">Export</button>
-            <label class="btn btn-ghost file-btn">
-              Import
-              <input id="importInput" type="file" accept="application/json" hidden />
-            </label>
-          </div>
-        </div>
-      </section>
-    </section>
-
-    <section class="layout">
-      <aside class="left-rail">
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Scenario Control</h3>
-            <span class="pill accent">Build 1 Runtime</span>
-          </div>
-
-          <div class="panel-body form-grid">
-            <label class="field full">
-              <span>Scenario</span>
-              <select id="scenarioSelect" aria-label="Scenario selection"></select>
-            </label>
-
-            <label class="field">
-              <span>Playback Speed</span>
-              <input
-                id="speedRange"
-                type="range"
-                min="250"
-                max="1400"
-                step="50"
-                value="650"
-                aria-label="Playback speed"
-              />
-            </label>
-
-            <label class="field">
-              <span>Mode Override</span>
-              <select id="modeSelect" aria-label="Mode override">
-                <option value="FULL_LEGITIMACY">FULL_LEGITIMACY</option>
-                <option value="DEGRADED_LEGITIMACY">DEGRADED_LEGITIMACY</option>
-                <option value="QUARANTINE_MODE">QUARANTINE_MODE</option>
-                <option value="EMERGENCY_PRESERVE_MODE">EMERGENCY_PRESERVE_MODE</option>
-                <option value="SAFE_HALT">SAFE_HALT</option>
-              </select>
-            </label>
-
-            <label class="field">
-              <span>Cadence Interval</span>
-              <input
-                id="cadenceInput"
-                type="number"
-                min="1"
-                step="1"
-                value="15"
-                inputmode="numeric"
-                aria-label="Cadence interval"
-              />
-            </label>
-
-            <label class="field">
-              <span>Cadence Unit</span>
-              <select id="cadenceUnit" aria-label="Cadence unit">
-                <option value="seconds">seconds</option>
-                <option value="minutes">minutes</option>
-                <option value="cycles">cycles</option>
-              </select>
-            </label>
-
-            <label class="field full">
-              <span>Scenario Thesis</span>
-              <textarea
-                id="scenarioNarrative"
-                rows="6"
-                aria-label="Scenario thesis"
-              ></textarea>
-            </label>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Structured Runtime Script</h3>
-            <span class="mono faint">Live reviewer input surface</span>
-          </div>
-          <div class="panel-body">
-            <div class="action-note">
-              Edit the script below, apply it into the runtime, then run the engine.
-              This is a real input surface for the same adjudication fields shown below.
-            </div>
-
-            <label class="field full">
-              <span>Runtime Script</span>
-              <textarea
-                id="runtimeScript"
-                class="script-box mono"
-                rows="20"
-                spellcheck="false"
-                aria-label="Structured runtime script"
-              >MODE=FULL_LEGITIMACY
-
-REQUEST.Request_ID=0xA1000001
-REQUEST.Domain_ID=0x0042
-REQUEST.Action_Class=C
-REQUEST.Identity_Class=A1
-REQUEST.Target_State_ID=0x0000000000000000
-REQUEST.Commit_ID=0xC0MM17A1
-REQUEST.Sequence_Number=1024
-REQUEST.Flags=Presence_Required | Reciprocity_Required | Persistent_Result_Expected | Export_Requested
-REQUEST.Timestamp=1712051000
-
-ENV.currentEpoch=1712051060
-ENV.maxFreshnessSec=900
-ENV.lastSequenceSeen=1023
-ENV.revocationStatus=active
-ENV.scopeStatus=in_scope
-ENV.presenceStatus=live
-ENV.commitAuthenticity=authentic
-ENV.commitScopeStatus=bound
-ENV.timingStatus=valid
-ENV.reciprocityStatus=compatible
-ENV.parentStateStatus=none
-ENV.integrityStatus=clean
-ENV.supportSetStatus=sufficient
-ENV.exportControl=allowed
-ENV.protectedUserMode=not_invoked
-ENV.previousStateClass=NON_EXISTENT
-ENV.persistenceRequested=yes
-ENV.degradedConstraintLevel=allow_c
-
-POLICY.allowClassA=true
-POLICY.allowClassB=true
-POLICY.allowClassC=true
-POLICY.requirePresenceForClassC=true
-POLICY.requireCommitForClassC=true
-POLICY.allowExport=true
-POLICY.failSafeOnUncertainty=true
-POLICY.quarantineOnReplay=true
-POLICY.downgradeOnModeRestriction=true</textarea>
-            </label>
-
-            <div class="action-grid script-action-grid">
-              <button id="applyScriptBtn" class="btn btn-primary" type="button">Apply Script</button>
-              <button id="loadScenarioScriptBtn" class="btn btn-secondary" type="button">Load Scenario Into Script</button>
-              <button id="resetScriptBtn" class="btn btn-ghost" type="button">Reset Script</button>
-              <button id="copyScriptBtn" class="btn btn-ghost" type="button">Copy Script</button>
-            </div>
-
-            <div id="scriptStatus" class="script-status faint" aria-live="polite">
-              Structured runtime script ready.
-            </div>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Editable Request Packet</h3>
-            <span class="mono faint">Ingress model</span>
-          </div>
-          <div id="requestEditor" class="panel-body request-editor"></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Policy Profile</h3>
-            <span class="mono faint">Mutable controls</span>
-          </div>
-          <div id="policyEditor" class="panel-body policy-editor"></div>
-        </section>
-
-        <!-- Environment / Evaluation Context panel is inserted by app.js directly after Policy Profile -->
-
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Decision Surface</h3>
-            <span id="reasonBadge" class="pill neutral">Awaiting run</span>
-          </div>
-
-          <div class="panel-body decision-grid">
-            <article class="decision-card">
-              <span class="tiny-label">Disposition</span>
-              <strong id="dispositionOut">—</strong>
-            </article>
-
-            <article class="decision-card">
-              <span class="tiny-label">Resulting State</span>
-              <strong id="stateOut">—</strong>
-            </article>
-
-            <article class="decision-card">
-              <span class="tiny-label">Audit Event</span>
-              <strong id="auditEventOut">—</strong>
-            </article>
-          </div>
-        </section>
+        <p>
+          It is a browser adjudication reference runtime for live public review.
+          It is not RTL, not ASIC, not a fabrication package, and not full verification closure.
+        </p>
+        <p>
+          The canonical packet remains authoritative for the normative FPGA / ASIC profile,
+          including realization posture, interface posture, clocking, memory protections,
+          verification obligations, and implementation baselines.
+        </p>
       </aside>
+    </header>
 
-      <section class="right-stage">
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Governance Pipeline</h3>
-            <div class="legend">
-              <span><i class="dot pending"></i>Pending</span>
-              <span><i class="dot active"></i>Active</span>
-              <span><i class="dot pass"></i>Resolved</span>
-              <span><i class="dot fail"></i>Blocked</span>
+    <main class="main-grid">
+      <!-- ========================================================= -->
+      <!-- Runtime Control                                            -->
+      <!-- ========================================================= -->
+      <section class="panel" id="runtimeControlPanel">
+        <div class="panel-head">
+          <div>
+            <h2>Runtime Control</h2>
+            <p class="panel-subtitle">
+              Select a baseline scenario, adjust operating posture, and execute the live browser adjudication runtime.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel-body control-grid">
+          <div class="field">
+            <label for="scenarioSelect">Scenario</label>
+            <select id="scenarioSelect"></select>
+          </div>
+
+          <div class="field">
+            <label for="modeSelect">Mode</label>
+            <select id="modeSelect">
+              <option value="FULL_LEGITIMACY">FULL_LEGITIMACY</option>
+              <option value="DEGRADED_LEGITIMACY">DEGRADED_LEGITIMACY</option>
+              <option value="QUARANTINE_MODE">QUARANTINE_MODE</option>
+              <option value="EMERGENCY_PRESERVE_MODE">EMERGENCY_PRESERVE_MODE</option>
+              <option value="SAFE_HALT">SAFE_HALT</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="speedRange">Run Speed</label>
+            <input id="speedRange" type="range" min="120" max="1600" step="40" value="650" />
+          </div>
+
+          <div class="field">
+            <label for="cadenceInput">Cadence Value</label>
+            <input id="cadenceInput" type="number" min="1" value="15" />
+          </div>
+
+          <div class="field">
+            <label for="cadenceUnit">Cadence Unit</label>
+            <select id="cadenceUnit">
+              <option value="seconds">seconds</option>
+              <option value="minutes">minutes</option>
+              <option value="hours">hours</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="scenarioNarrative">Scenario Narrative</label>
+            <textarea id="scenarioNarrative" rows="4"></textarea>
+          </div>
+
+          <div class="toolbar full">
+            <button id="runBtn" class="btn btn-accent" type="button">Run</button>
+            <button id="stepBtn" class="btn" type="button">Step</button>
+            <button id="resetBtn" class="btn" type="button">Reset</button>
+            <button id="queueBtn" class="btn" type="button">Queue Snapshot</button>
+            <button id="drainQueueBtn" class="btn" type="button">Drain Queue</button>
+            <button id="exportBtn" class="btn" type="button">Export JSON</button>
+            <label class="btn file-btn" for="importInput">Import JSON</label>
+            <input id="importInput" type="file" accept=".json,application/json" />
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Structured Runtime Script                                  -->
+      <!-- ========================================================= -->
+      <section class="panel runtime-script-panel" id="runtimeScriptPanel">
+        <div class="panel-head">
+          <div>
+            <h2>Structured Runtime Script</h2>
+            <p class="panel-subtitle">
+              Constrained script surface bound to live engine state. Parse / Apply updates request, policy, environment, and mode.
+            </p>
+          </div>
+
+          <div class="runtime-script-actions">
+            <button id="applyScriptBtn" class="btn" type="button">Parse / Apply</button>
+            <button id="runScriptBtn" class="btn btn-accent" type="button">Apply + Run</button>
+            <button id="resetScriptBtn" class="btn" type="button">Reset Script</button>
+          </div>
+        </div>
+
+        <div class="panel-body runtime-script-body">
+          <div class="runtime-script-intro">
+            This parser is intentionally constrained. It accepts only structured assignments for
+            <span class="mono">MODE</span>,
+            <span class="mono">REQUEST.*</span>,
+            <span class="mono">ENV.*</span>,
+            and
+            <span class="mono">POLICY.*</span>.
+            It is not terminal theater and not freeform natural-language parsing.
+          </div>
+
+          <div class="field full">
+            <label for="runtimeScriptInput">Runtime Script</label>
+            <textarea
+              id="runtimeScriptInput"
+              class="runtime-script-input mono"
+              spellcheck="false"
+              autocomplete="off"
+              autocapitalize="off"
+              wrap="off"
+            ></textarea>
+          </div>
+
+          <div class="runtime-script-status-row">
+            <div id="runtimeScriptStatus" class="runtime-script-status neutral">
+              Awaiting parse.
             </div>
           </div>
-          <div class="panel-body">
-            <div id="pipelineGrid" class="pipeline-grid"></div>
-          </div>
-        </section>
 
-        <section class="two-column">
-          <section class="panel">
-            <div class="panel-head">
-              <h3>Predicate Matrix</h3>
-              <span class="mono faint">Computed from live inputs</span>
-            </div>
-            <div class="panel-body table-wrap">
-              <table class="predicate-table">
+          <div class="runtime-script-help">
+            <div class="runtime-script-help-title">Accepted Forms</div>
+            <ul class="runtime-script-help-list">
+              <li><span class="mono">MODE=FULL_LEGITIMACY</span></li>
+              <li><span class="mono">REQUEST.FieldName=value</span></li>
+              <li><span class="mono">ENV.FieldName=value</span></li>
+              <li><span class="mono">POLICY.FieldName=true|false</span></li>
+              <li><span class="mono"># comment</span> and <span class="mono">// comment</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Request Packet Editor                                      -->
+      <!-- ========================================================= -->
+      <section class="panel" id="requestPanel">
+        <div class="panel-head">
+          <div>
+            <h2>Request Packet Editor</h2>
+            <p class="panel-subtitle">
+              Live request fields used by the browser adjudication reference runtime.
+            </p>
+          </div>
+        </div>
+        <div id="requestEditor" class="panel-body request-editor"></div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Policy Profile                                             -->
+      <!-- ========================================================= -->
+      <section class="panel" id="policyPanel">
+        <div class="panel-head">
+          <div>
+            <h2>Policy Profile</h2>
+            <p class="panel-subtitle">
+              Active boolean control surface affecting admissibility behavior in the browser runtime.
+            </p>
+          </div>
+        </div>
+        <div id="policyEditor" class="panel-body policy-editor"></div>
+      </section>
+
+      <!-- Environment panel is inserted by JS immediately after policy panel -->
+
+      <!-- ========================================================= -->
+      <!-- Decision Surface                                           -->
+      <!-- ========================================================= -->
+      <section class="panel" id="decisionPanel">
+        <div class="panel-head">
+          <div>
+            <h2>Decision Surface</h2>
+            <p class="panel-subtitle">
+              Live disposition, resulting state, event class, and primary governing reason.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel-body decision-grid">
+          <article class="decision-card">
+            <div class="decision-label mono">Disposition</div>
+            <div id="dispositionOut" class="decision-value">—</div>
+          </article>
+
+          <article class="decision-card">
+            <div class="decision-label mono">Resulting State</div>
+            <div id="stateOut" class="decision-value">—</div>
+          </article>
+
+          <article class="decision-card">
+            <div class="decision-label mono">Audit Event</div>
+            <div id="auditEventOut" class="decision-value">—</div>
+          </article>
+
+          <article class="decision-card full">
+            <div class="decision-label mono">Primary Reason</div>
+            <div id="reasonBadge" class="pill neutral">Awaiting run</div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Pipeline                                                   -->
+      <!-- ========================================================= -->
+      <section class="panel" id="pipelinePanel">
+        <div class="panel-head">
+          <div>
+            <h2>Normative Decision Order</h2>
+            <p class="panel-subtitle">
+              Public browser implementation of the packet’s adjudication sequence in review form.
+            </p>
+          </div>
+        </div>
+        <div id="pipelineGrid" class="panel-body pipeline-grid"></div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Analysis Tabs                                              -->
+      <!-- ========================================================= -->
+      <section class="panel" id="analysisPanel">
+        <div class="panel-head tabs-head">
+          <div>
+            <h2>Analysis Views</h2>
+            <p class="panel-subtitle">
+              Input-driven predicates, resulting state, continuity review, conceptual packet / register views, and adversarial presets.
+            </p>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="Analysis views">
+            <button class="tab-btn active" data-tab="tab-predicates" type="button" role="tab" aria-selected="true">Predicates</button>
+            <button class="tab-btn" data-tab="tab-states" type="button" role="tab" aria-selected="false">States</button>
+            <button class="tab-btn" data-tab="tab-ledger" type="button" role="tab" aria-selected="false">Continuity</button>
+            <button class="tab-btn" data-tab="tab-signals" type="button" role="tab" aria-selected="false">Signals</button>
+            <button class="tab-btn" data-tab="tab-packet" type="button" role="tab" aria-selected="false">Packet</button>
+            <button class="tab-btn" data-tab="tab-registers" type="button" role="tab" aria-selected="false">Registers</button>
+            <button class="tab-btn" data-tab="tab-transitions" type="button" role="tab" aria-selected="false">Transitions</button>
+            <button class="tab-btn" data-tab="tab-adversarial" type="button" role="tab" aria-selected="false">Adversarial</button>
+          </div>
+        </div>
+
+        <div class="panel-body tab-wrap">
+          <section id="tab-predicates" class="tab-panel active" role="tabpanel">
+            <div class="table-wrap">
+              <table>
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Predicate</th>
+                    <th>Name</th>
                     <th>Owner</th>
                     <th>Status</th>
                     <th>Reason</th>
@@ -380,141 +298,149 @@ POLICY.downgradeOnModeRestriction=true</textarea>
             </div>
           </section>
 
-          <section class="panel">
-            <div class="panel-head">
-              <h3>State Constellation</h3>
-              <span class="mono faint">Machine-significant ontology</span>
-            </div>
-            <div class="panel-body">
-              <div id="stateGrid" class="state-grid"></div>
-              <div id="transitionNote" class="transition-note">
-                No governed transition has been executed yet.
-              </div>
-            </div>
-          </section>
-        </section>
-
-        <section class="three-column">
-          <section class="panel">
-            <div class="panel-head">
-              <h3>Continuity Ledger</h3>
-              <span class="mono faint">Support-set truth</span>
-            </div>
-            <div class="panel-body">
-              <div id="ledgerSummary" class="ledger-summary"></div>
-              <div id="supportGrid" class="support-grid"></div>
+          <section id="tab-states" class="tab-panel" role="tabpanel">
+            <div id="stateGrid" class="state-grid"></div>
+            <div id="transitionNote" class="transition-note">
+              No governed transition has been executed yet.
             </div>
           </section>
 
-          <section class="panel">
-            <div class="panel-head">
-              <h3>Request Queue</h3>
-              <span class="mono faint">Browser request harness</span>
-            </div>
-            <div class="panel-body">
-              <div id="queueSummary" class="queue-summary">Queue depth: 0</div>
-              <ol id="queueList" class="queue-list"></ol>
+          <section id="tab-ledger" class="tab-panel" role="tabpanel">
+            <div id="ledgerSummary" class="ledger-summary"></div>
+            <div id="supportGrid" class="support-grid"></div>
+          </section>
+
+          <section id="tab-signals" class="tab-panel" role="tabpanel">
+            <div id="signalGrid" class="signal-grid"></div>
+          </section>
+
+          <section id="tab-packet" class="tab-panel" role="tabpanel">
+            <div id="packetView" class="packet-view"></div>
+          </section>
+
+          <section id="tab-registers" class="tab-panel" role="tabpanel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Address</th>
+                    <th>Name</th>
+                    <th>Access</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody id="registerBody"></tbody>
+              </table>
             </div>
           </section>
 
-          <section class="panel">
-            <div class="panel-head">
-              <h3>Conceptual Signals</h3>
-              <span class="mono faint">Public runtime instrumentation</span>
-            </div>
-            <div class="panel-body">
-              <div id="signalGrid" class="signal-grid"></div>
+          <section id="tab-transitions" class="tab-panel" role="tabpanel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>From \ To</th>
+                    <th>ADV</th>
+                    <th>STG</th>
+                    <th>EXE</th>
+                    <th>CON</th>
+                    <th>PER</th>
+                    <th>INV</th>
+                    <th>QUA</th>
+                    <th>TER</th>
+                    <th>TRN</th>
+                  </tr>
+                </thead>
+                <tbody id="transitionBody"></tbody>
+              </table>
             </div>
           </section>
-        </section>
 
-        <section class="tabs panel">
+          <section id="tab-adversarial" class="tab-panel" role="tabpanel">
+            <div id="adversarialList" class="adversarial-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Legitimacy Record / Trace                                  -->
+      <!-- ========================================================= -->
+      <section class="panel split-panel" id="recordTracePanel">
+        <div class="split-col">
           <div class="panel-head">
-            <h3>System Views</h3>
-            <div class="tab-row">
-              <button class="tab-btn active" data-tab="packetTab" type="button">Packet Anatomy</button>
-              <button class="tab-btn" data-tab="registerTab" type="button">Register Map</button>
-              <button class="tab-btn" data-tab="transitionTab" type="button">Transition Matrix</button>
-              <button class="tab-btn" data-tab="adversarialTab" type="button">Adversarial Library</button>
+            <div>
+              <h2>Governance-Meaningful Audit Record</h2>
+              <p class="panel-subtitle">
+                Live browser audit artifact generated from current adjudication state.
+              </p>
             </div>
-          </div>
-
-          <div class="panel-body">
-            <section id="packetTab" class="tab-panel active">
-              <div id="packetView" class="packet-view"></div>
-            </section>
-
-            <section id="registerTab" class="tab-panel">
-              <div class="table-wrap">
-                <table class="predicate-table">
-                  <thead>
-                    <tr>
-                      <th>Address</th>
-                      <th>Name</th>
-                      <th>Access</th>
-                      <th>Description</th>
-                    </tr>
-                  </thead>
-                  <tbody id="registerBody"></tbody>
-                </table>
-              </div>
-            </section>
-
-            <section id="transitionTab" class="tab-panel">
-              <div class="table-wrap">
-                <table class="predicate-table transition-table">
-                  <thead>
-                    <tr>
-                      <th>From \ To</th>
-                      <th>Advisory</th>
-                      <th>Staged</th>
-                      <th>Executable</th>
-                      <th>Consequence</th>
-                      <th>Persistent</th>
-                      <th>Invalid</th>
-                      <th>Quarantined</th>
-                      <th>Terminated</th>
-                      <th>Review</th>
-                    </tr>
-                  </thead>
-                  <tbody id="transitionBody"></tbody>
-                </table>
-              </div>
-            </section>
-
-            <section id="adversarialTab" class="tab-panel">
-              <div id="adversarialList" class="adversarial-list"></div>
-            </section>
-          </div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head">
-            <h3>Legitimacy Record</h3>
-            <span class="mono faint">Meaning, not mere chronology</span>
           </div>
           <div class="panel-body">
             <pre id="auditRecord" class="audit-record">Run a scenario to generate the computed legitimacy record.</pre>
           </div>
-        </section>
+        </div>
 
-        <section class="panel">
+        <div class="split-col">
           <div class="panel-head">
-            <h3>Execution Trace</h3>
-            <span class="mono faint">Causal event stream</span>
+            <div>
+              <h2>Execution Trace</h2>
+              <p class="panel-subtitle">
+                Live runtime narration across decision stages and predicate families.
+              </p>
+            </div>
+          </div>
+          <div class="panel-body trace-wrap">
+            <ul id="traceList" class="trace-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================= -->
+      <!-- Queue / Public Notes                                       -->
+      <!-- ========================================================= -->
+      <section class="panel split-panel" id="queueNotesPanel">
+        <div class="split-col">
+          <div class="panel-head">
+            <div>
+              <h2>Queued Snapshots</h2>
+              <p class="panel-subtitle">
+                Stored scenario snapshots for repeated review and drain-back execution.
+              </p>
+            </div>
           </div>
           <div class="panel-body">
-            <ol id="traceList" class="trace-list"></ol>
+            <div id="queueSummary" class="queue-summary">Queue depth: 0</div>
+            <ul id="queueList" class="queue-list"></ul>
           </div>
-        </section>
-      </section>
-    </section>
-  </main>
+        </div>
 
-  <footer class="footer">
-    <span>AEGIS-CORE C1 browser adjudication reference artifact.</span>
-    <span class="mono faint">HTML • CSS • JavaScript • GitHub Pages ready</span>
-  </footer>
+        <div class="split-col">
+          <div class="panel-head">
+            <div>
+              <h2>Public Review Notes</h2>
+              <p class="panel-subtitle">
+                Scope statements for the browser artifact and its relationship to the canonical packet.
+              </p>
+            </div>
+          </div>
+          <div class="panel-body notes">
+            <p>
+              This artifact is a live browser adjudication reference runtime for public technical review.
+              It implements the packet’s normative decision order in browser form.
+            </p>
+            <p>
+              It exposes input-driven predicate evaluation, disposition resolution, resulting state classification,
+              continuity review, and governance-meaningful audit generation.
+            </p>
+            <p>
+              It is not RTL, not ASIC, not a fabrication package, and not full verification closure.
+              The packet remains authoritative for the normative FPGA / ASIC realization profile.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>
