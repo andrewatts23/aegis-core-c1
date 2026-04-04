@@ -161,7 +161,7 @@ h1 {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.45;
-  max-width: 880px;
+  max-width: 900px;
 }
 
 .shell {
@@ -208,7 +208,7 @@ h1 {
   font-size: clamp(32px, 4.2vw, 56px);
   line-height: 1.01;
   letter-spacing: -0.05em;
-  max-width: 950px;
+  max-width: 960px;
 }
 
 .hero p {
@@ -921,7 +921,6 @@ input[type="range"] {
   line-height: 1.5;
 }
 
-/* medium screens */
 @media (max-width: 1450px) {
   .layout,
   .hero,
@@ -936,7 +935,6 @@ input[type="range"] {
   }
 }
 
-/* tablet and small laptop */
 @media (max-width: 950px) {
   .pipeline-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1064,7 +1062,6 @@ input[type="range"] {
   }
 }
 
-/* phones */
 @media (max-width: 640px) {
   .shell {
     padding: 12px;
@@ -1160,7 +1157,6 @@ input[type="range"] {
   }
 }
 
-/* very small phones */
 @media (max-width: 390px) {
   .shell {
     padding: 10px;
