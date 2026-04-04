@@ -4,30 +4,31 @@
   /*
     AEGIS-CORE C1 — Build 1 Browser Adjudication Runtime
     ----------------------------------------------------
-    Public runtime boundary:
-    - This is a browser-runnable adjudication reference runtime.
-    - It is not RTL, ASIC, tapeout, or fabrication proof.
-    - It computes live predicate, disposition, state, continuity, and audit outputs.
-    - Conceptual hardware-facing views remain explanatory in this public build.
+    Truth boundary:
+    - This is a browser-runnable reference engine for public technical review.
+    - It computes predicate outcomes from editable inputs.
+    - It does NOT claim RTL, ASIC, formal proof closure, or fabrication readiness.
+    - Conceptual views (register map, signal view, packet anatomy) remain explanatory.
+    - PF-15 Guardian / Protected-User is explicitly surfaced as limited / public-build scoped.
   */
 
   // ---------------------------------------------------------------------------
-  // Canonical runtime constants
+  // Canonical Structures
   // ---------------------------------------------------------------------------
 
   const STAGES = [
     ["S0", "Ingress Capture", "Capture request, validate basic framing, and enter governed evaluation context."],
     ["S1", "Request Classification", "Resolve action class and protected-state impact category."],
-    ["S2", "Authority Resolution", "Validate authority anchor, bounded scope, and revocation posture."],
+    ["S2", "Authority Resolution", "Validate authority anchor, scope, and revocation posture."],
     ["S3", "Presence Verification", "Validate live presence where required by class, policy, or context."],
-    ["S4", "Commit Validation", "Validate authenticity, freshness, scope, and commit binding."],
-    ["S5", "Timing / Sequence", "Validate clock posture, timeout truth, replay resistance, and monotonicity."],
+    ["S4", "Commit Validation", "Validate authenticity, freshness, scope, and binding of commit artifact."],
+    ["S5", "Timing / Sequence", "Validate clock posture, replay resistance, ordering, and monotonicity."],
     ["S6", "Reciprocity / Dependency", "Validate reciprocity compatibility and dependency support."],
-    ["S7", "Admissibility Resolution", "Resolve governed disposition from predicate, uncertainty, and mode posture."],
-    ["S8", "Controlled Dispatch", "Permit bounded consequence only if disposition is ALLOW."],
-    ["S9", "State Legality", "Resolve resulting machine-significant state class."],
-    ["S10", "Persistence Init / Review", "Evaluate continuity support-set truth for persistent posture."],
-    ["S11", "Audit Anchor / Export", "Write legitimacy record and bounded export posture."]
+    ["S7", "Admissibility Resolution", "Resolve ALLOW, DENY, STAGE, DOWNGRADE, QUARANTINE, TERMINATE, or PRESERVE_FOR_REVIEW."],
+    ["S8", "Controlled Dispatch", "Permit bounded consequence only if disposition authorizes it."],
+    ["S9", "State Legality", "Resolve resulting machine-significant state class under governed transition rules."],
+    ["S10", "Persistence Init / Review", "Evaluate continuity support-set truth for any persistent result."],
+    ["S11", "Audit Anchor / Export", "Write governance-meaningful legitimacy record and bounded export posture."]
   ];
 
   const PREDICATES = [
@@ -106,10 +107,10 @@
     ["integrityStatus", "Integrity Status", "select", "clean", "Integrity posture", ["clean", "tampered", "uncertain"]],
     ["supportSetStatus", "Support-Set Status", "select", "sufficient", "Persistence support posture", ["sufficient", "insufficient", "uncertain"]],
     ["exportControl", "Export Control", "select", "allowed", "Externalization posture", ["allowed", "blocked", "review_only"]],
-    ["protectedUserMode", "Protected-User / Guardian", "select", "not_invoked", "Public-build guardian posture", ["not_invoked", "required_present", "required_missing", "uncertain"]],
-    ["previousStateClass", "Previous State Class", "select", "NON_EXISTENT", "Machine-significant prior state", STATES],
+    ["protectedUserMode", "Protected-User / Guardian", "select", "not_invoked", "Public-build limited guardian posture", ["not_invoked", "required_present", "required_missing", "uncertain"]],
+    ["previousStateClass", "Previous State Class", "select", "NON_EXISTENT", "Machine-significant state before evaluation", STATES],
     ["persistenceRequested", "Persistence Requested", "select", "yes", "Whether persistence is expected if admitted", ["yes", "no"]],
-    ["degradedConstraintLevel", "Degraded Constraint", "select", "allow_c", "Mode restriction posture", ["allow_c", "block_c", "advisory_only", "emergency_preserve_only"]]
+    ["degradedConstraintLevel", "Degraded Constraint", "select", "allow_c", "Mode constraint posture", ["allow_c", "block_c", "advisory_only", "emergency_preserve_only"]]
   ];
 
   const REGISTERS = [
@@ -146,144 +147,6 @@
     ["QUARANTINED", "F", "G", "F", "F", "F", "A", "A", "G", "G"],
     ["TERMINATED", "F", "F", "F", "F", "F", "F", "F", "A", "G"]
   ];
-
-  const TRANSITION_MATRIX = {
-    NON_EXISTENT: {
-      ALLOW: "CONSEQUENCE",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    ADVISORY: {
-      ALLOW: "ADVISORY",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    STAGED: {
-      ALLOW: "CONSEQUENCE",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    EXECUTABLE: {
-      ALLOW: "CONSEQUENCE",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    CONSEQUENCE: {
-      ALLOW: "CONSEQUENCE",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    PERSISTENT: {
-      ALLOW: "PERSISTENT",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    INVALID: {
-      ALLOW: "TRANSITIONAL",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    TERMINATED: {
-      ALLOW: "TRANSITIONAL",
-      DENY: "TERMINATED",
-      STAGE: "TERMINATED",
-      DOWNGRADE: "TERMINATED",
-      QUARANTINE: "TERMINATED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    QUARANTINED: {
-      ALLOW: "TRANSITIONAL",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    DISPUTED: {
-      ALLOW: "TRANSITIONAL",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    DEGRADED: {
-      ALLOW: "DEGRADED",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    EMERGENCY_PRESERVED: {
-      ALLOW: "EMERGENCY_PRESERVED",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    ORPHAN: {
-      ALLOW: "TRANSITIONAL",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    ESCROW: {
-      ALLOW: "TRANSITIONAL",
-      DENY: "INVALID",
-      STAGE: "ESCROW",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    },
-    TRANSITIONAL: {
-      ALLOW: "CONSEQUENCE",
-      DENY: "INVALID",
-      STAGE: "STAGED",
-      DOWNGRADE: "DEGRADED",
-      QUARANTINE: "QUARANTINED",
-      TERMINATE: "TERMINATED",
-      PRESERVE_FOR_REVIEW: "ESCROW"
-    }
-  };
 
   const ADVERSARIAL_TESTS = [
     ["Replay Attack", "Sequence / freshness conflict attempts stale reuse."],
@@ -390,7 +253,7 @@
       name: "03 — Replay Ambiguity / Quarantine",
       mode: "DEGRADED_LEGITIMACY",
       narrative:
-        "The request presents stale or suspicious reuse characteristics. The architecture refuses false certainty and isolates the path under governed quarantine.",
+        "The request presents replay, freshness, or integrity ambiguity. The architecture refuses false certainty and isolates the path under governed quarantine rather than flattening uncertainty into valid consequence.",
       request: {
         Request_ID: "0xA1000003",
         Domain_ID: "0x0062",
@@ -427,7 +290,7 @@
   ];
 
   // ---------------------------------------------------------------------------
-  // DOM
+  // DOM Helpers
   // ---------------------------------------------------------------------------
 
   function byId(id) {
@@ -472,7 +335,7 @@
   };
 
   // ---------------------------------------------------------------------------
-  // Runtime state
+  // Runtime State
   // ---------------------------------------------------------------------------
 
   let scenarioLibrary = deepClone(BASE_SCENARIOS);
@@ -485,7 +348,7 @@
   let envEditorHost = null;
 
   // ---------------------------------------------------------------------------
-  // Init
+  // Initialization
   // ---------------------------------------------------------------------------
 
   init();
@@ -503,6 +366,10 @@
     setupStarfield();
     loadScenario(currentScenario.id);
   }
+
+  // ---------------------------------------------------------------------------
+  // Event Binding
+  // ---------------------------------------------------------------------------
 
   function bindEvents() {
     if (els.scenarioSelect) {
@@ -538,6 +405,10 @@
     if (els.importInput) els.importInput.addEventListener("change", importScenarioJson);
   }
 
+  // ---------------------------------------------------------------------------
+  // UI Setup
+  // ---------------------------------------------------------------------------
+
   function ensureEnvironmentPanel() {
     if (!els.policyEditor) return;
     const policyPanel = els.policyEditor.closest(".panel");
@@ -547,8 +418,8 @@
     envPanel.className = "panel";
     envPanel.innerHTML =
       '<div class="panel-head">' +
-      '<h3>Environment / Evaluation Context</h3>' +
-      '<span class="mono faint">Live adjudication inputs</span>' +
+        "<h3>Environment / Evaluation Context</h3>" +
+        '<span class="mono faint">Live adjudication inputs</span>' +
       "</div>" +
       '<div id="environmentEditor" class="panel-body policy-editor"></div>';
 
@@ -576,7 +447,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Scenario control
+  // Scenario Control
   // ---------------------------------------------------------------------------
 
   function populateScenarioSelect() {
@@ -636,7 +507,7 @@
       els.auditRecord.textContent = "Run a scenario to generate the computed legitimacy record.";
     }
     if (els.transitionNote) {
-      els.transitionNote.textContent = "No governed transition has been evaluated yet.";
+      els.transitionNote.textContent = "No governed transition has been executed yet.";
     }
     if (els.traceList) {
       els.traceList.innerHTML = "";
@@ -644,7 +515,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Editors
+  // Render Editors
   // ---------------------------------------------------------------------------
 
   function renderRequestEditor() {
@@ -683,8 +554,8 @@
       wrapper.innerHTML =
         '<label for="policy-' + escapeAttribute(key) + '">' + escapeHtml(label) + "</label>" +
         '<select id="policy-' + escapeAttribute(key) + '">' +
-        '<option value="true"' + (currentScenario.policies[key] ? ' selected="selected"' : "") + ">true</option>" +
-        '<option value="false"' + (!currentScenario.policies[key] ? ' selected="selected"' : "") + ">false</option>" +
+          '<option value="true"' + (currentScenario.policies[key] ? ' selected="selected"' : "") + ">true</option>" +
+          '<option value="false"' + (!currentScenario.policies[key] ? ' selected="selected"' : "") + ">false</option>" +
         "</select>";
 
       const select = wrapper.querySelector("select");
@@ -715,19 +586,9 @@
       if (type === "select") {
         controlHtml =
           '<select id="env-' + escapeAttribute(key) + '">' +
-          options
-            .map(function (opt) {
-              return (
-                '<option value="' +
-                escapeAttribute(opt) +
-                '"' +
-                (String(value) === String(opt) ? ' selected="selected"' : "") +
-                ">" +
-                escapeHtml(opt) +
-                "</option>"
-              );
-            })
-            .join("") +
+          options.map(function (opt) {
+            return '<option value="' + escapeAttribute(opt) + '"' + (String(value) === String(opt) ? ' selected="selected"' : "") + ">" + escapeHtml(opt) + "</option>";
+          }).join("") +
           "</select>";
       } else {
         controlHtml =
@@ -754,7 +615,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Pipeline rendering
+  // Pipeline Rendering
   // ---------------------------------------------------------------------------
 
   function renderPipeline() {
@@ -801,7 +662,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Execution
+  // Execution Controls
   // ---------------------------------------------------------------------------
 
   function stopTimer() {
@@ -849,10 +710,11 @@
 
     if (stageCursor === 9 && lastEvaluation) {
       renderStateGrid(lastEvaluation.state.stateBefore, lastEvaluation.state.stateAfter);
-      const via = lastEvaluation.state.intermediateState ? " via " + lastEvaluation.state.intermediateState : "";
+      const via = lastEvaluation.state.intermediateState ? (" via " + lastEvaluation.state.intermediateState) : "";
       if (els.transitionNote) {
         els.transitionNote.textContent =
-          lastEvaluation.state.stateBefore + " → " + lastEvaluation.state.stateAfter + via + ". " + lastEvaluation.state.transitionReason;
+          lastEvaluation.state.stateBefore + " → " + lastEvaluation.state.stateAfter + via + ". " +
+          lastEvaluation.state.transitionReason;
       }
     }
 
@@ -881,7 +743,6 @@
     renderStateGrid(lastEvaluation.state.stateBefore, null);
     renderLedger(false);
     renderSignals();
-
     if (els.auditRecord) {
       els.auditRecord.textContent = "Run progression in motion. The final legitimacy record will anchor at S11.";
     }
@@ -893,7 +754,6 @@
     if (!lastEvaluation) {
       lastEvaluation = evaluateCurrentScenario();
     }
-
     renderDecisionSurface();
     renderPredicates(true);
     renderStateGrid(lastEvaluation.state.stateBefore, lastEvaluation.state.stateAfter);
@@ -903,15 +763,7 @@
       els.auditRecord.textContent = JSON.stringify(lastEvaluation.audit, null, 2);
     }
 
-    trace(
-      "Scenario complete. Disposition " +
-        lastEvaluation.decision.disposition +
-        "; state " +
-        lastEvaluation.state.stateAfter +
-        "; audit event " +
-        lastEvaluation.audit.Event_Class +
-        "."
-    );
+    trace("Scenario complete. Disposition " + lastEvaluation.decision.disposition + "; state " + lastEvaluation.state.stateAfter + "; audit event " + lastEvaluation.audit.Event_Class + ".");
   }
 
   function narrateStage(index) {
@@ -920,20 +772,19 @@
     const code = STAGES[index][0];
     const messages = {
       0: "Ingress captured. The request is now a governed evaluation object rather than a presumed executable event.",
-      1: "Action class resolved as " + safeUpper(lastEvaluation.input.request.Action_Class) + ". PF-01 is computed from live packet input.",
-      2: "Authority evaluated from identity class, revocation posture, and scope posture. PF-02 and PF-03 are live results.",
-      3: "Presence posture evaluated from packet flags, policy requirements, and environment status.",
-      4: "Commit authenticity, freshness, and scope binding evaluated from commit artifact and timing context.",
-      5: "Timing and sequence posture evaluated from request timestamp, evaluator clock, and monotonic anchor.",
-      6: "Reciprocity and dependency posture evaluated from compatibility and parent-state signals.",
+      1: "Action class resolved as " + safeUpper(lastEvaluation.input.request.Action_Class) + ". Predicate PF-01 computed from live packet input.",
+      2: "Authority evaluated from identity class, revocation posture, and scope status. PF-02 and PF-03 are live results, not canned scenario text.",
+      3: "Presence posture evaluated from packet flags, policy, and environment status.",
+      4: "Commit authenticity, freshness, and scope binding evaluated from commit artifact, clock window, and scope posture.",
+      5: "Timing and sequence posture evaluated from request timestamp, evaluator clock, monotonic sequence anchor, and replay conditions.",
+      6: "Reciprocity and dependency posture evaluated from compatibility and parent-state environment signals.",
       7: "Admissibility resolved to " + lastEvaluation.decision.disposition + " under governed predicate logic.",
-      8:
-        lastEvaluation.decision.disposition === "ALLOW"
-          ? "Controlled dispatch authorized. Only ALLOW is permitted to cross into bounded consequence-bearing execution."
-          : "Execution withheld from consequence path. Disposition controller retains custody under " + lastEvaluation.decision.disposition + ".",
+      8: lastEvaluation.decision.disposition === "ALLOW"
+        ? "Controlled dispatch authorized. Only ALLOW is permitted to cross into bounded consequence-bearing execution."
+        : "Execution withheld from consequence path. Disposition controller retains custody under " + lastEvaluation.decision.disposition + ".",
       9: "Resulting state legality resolved as " + lastEvaluation.state.stateAfter + ".",
-      10: "Continuity support-set reviewed. Persistence is treated as conditional rather than inertial.",
-      11: "Legitimacy record anchored with governance meaning and bounded export posture."
+      10: "Continuity support-set reviewed. Persistence is conditional rather than inertial.",
+      11: "Legitimacy record anchored with governance meaning and bounded export posture. Conceptual signal and register views remain explanatory in this public build."
     };
 
     trace("[" + code + "] " + messages[index]);
@@ -944,7 +795,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Core evaluation
+  // Core Evaluation
   // ---------------------------------------------------------------------------
 
   function recomputePreview(logIt) {
@@ -954,7 +805,7 @@
     renderStateGrid(lastEvaluation.state.stateBefore, null);
     renderLedger(false);
 
-    if (logIt) {
+    if (logIt && stageCursor < 0) {
       trace("Preview recomputed from live input changes.");
     }
   }
@@ -998,33 +849,37 @@
   }
 
   function evaluatePredicates(input) {
-    return {
-      "PF-01": evalActionClass(input),
-      "PF-02": evalAuthorityValidity(input),
-      "PF-03": evalAuthorityScope(input),
-      "PF-04": evalPresenceSufficiency(input),
-      "PF-05": evalCommitAuthenticity(input),
-      "PF-06": evalCommitFreshness(input),
-      "PF-07": evalCommitScope(input),
-      "PF-08": evalCommitSequence(input),
-      "PF-09": evalTimingValidity(input),
-      "PF-10": evalReciprocityCompatibility(input),
-      "PF-11": evalParentStateDependency(input),
-      "PF-12": evalPersistenceSupport(input),
-      "PF-13": evalIntegrity(input),
-      "PF-14": evalDegradedModeConstraint(input),
-      "PF-15": evalGuardianProtectedUser(input),
-      "PF-16": evalExportEligibility(input)
-    };
+    const out = {};
+
+    out["PF-01"] = evalActionClass(input);
+    out["PF-02"] = evalAuthorityValidity(input);
+    out["PF-03"] = evalAuthorityScope(input);
+    out["PF-04"] = evalPresenceSufficiency(input);
+    out["PF-05"] = evalCommitAuthenticity(input);
+    out["PF-06"] = evalCommitFreshness(input);
+    out["PF-07"] = evalCommitScope(input);
+    out["PF-08"] = evalCommitSequence(input);
+    out["PF-09"] = evalTimingValidity(input);
+    out["PF-10"] = evalReciprocityCompatibility(input);
+    out["PF-11"] = evalParentStateDependency(input);
+    out["PF-12"] = evalPersistenceSupport(input);
+    out["PF-13"] = evalIntegrity(input);
+    out["PF-14"] = evalDegradedModeConstraint(input);
+    out["PF-15"] = evalGuardianProtectedUser(input);
+    out["PF-16"] = evalExportEligibility(input);
+
+    return out;
   }
 
   // ---------------------------------------------------------------------------
-  // Predicates
+  // Predicate Functions
   // ---------------------------------------------------------------------------
 
   function evalActionClass(input) {
     const actionClass = normalizeActionClass(input.request.Action_Class);
-    if (!actionClass) return fail("No valid action class could be resolved from the request packet.");
+    if (!actionClass) {
+      return fail("No valid action class could be resolved from the request packet.");
+    }
 
     if (actionClass === "A" && !input.policies.allowClassA) {
       return fail("Action Class A is disabled by active policy profile.");
@@ -1043,19 +898,33 @@
     const identityClass = normalizeIdentityClass(input.request.Identity_Class);
     const revocationStatus = input.env.revocationStatus;
 
-    if (!identityClass) return fail("Identity class could not be resolved into a recognized authority anchor.");
-    if (revocationStatus === "revoked") return fail("Authority anchor is revoked and cannot authorize consequence.");
-    if (revocationStatus === "suspended") return fail("Authority anchor is suspended pending review.");
-    if (revocationStatus === "unknown") return uncertain("Authority posture is not fully known.");
-    if (identityClass === "A0") return fail("Identity class A0 is insufficient for consequence-bearing authority.");
+    if (!identityClass) {
+      return fail("Identity class could not be resolved into a recognized authority anchor.");
+    }
+    if (revocationStatus === "revoked") {
+      return fail("Authority anchor is revoked and cannot authorize consequence.");
+    }
+    if (revocationStatus === "suspended") {
+      return fail("Authority anchor is suspended pending review.");
+    }
+    if (revocationStatus === "unknown") {
+      return uncertain("Authority posture is not fully known.");
+    }
+    if (identityClass === "A0") {
+      return fail("Identity class A0 is insufficient for consequence-bearing authority.");
+    }
 
     return pass("Authority anchor is structurally valid for current identity posture.");
   }
 
   function evalAuthorityScope(input) {
     const scopeStatus = input.env.scopeStatus;
-    if (scopeStatus === "out_of_scope") return fail("Requested effect exceeds bounded authority scope.");
-    if (scopeStatus === "uncertain") return uncertain("Scope boundary cannot be cleared with present information.");
+    if (scopeStatus === "out_of_scope") {
+      return fail("Requested effect exceeds bounded authority scope.");
+    }
+    if (scopeStatus === "uncertain") {
+      return uncertain("Scope boundary cannot be cleared with present information.");
+    }
     return pass("Requested effect remains within bounded scope.");
   }
 
@@ -1066,9 +935,15 @@
     if (!presenceRequired) {
       return pass("Presence is not required for this request path under active class and flags.");
     }
-    if (status === "live") return pass("Presence heartbeat and liveness are sufficient.");
-    if (status === "stale") return fail("Presence is stale and cannot support live legitimacy.");
-    if (status === "missing") return fail("Required presence is missing.");
+    if (status === "live") {
+      return pass("Presence heartbeat and liveness are sufficient.");
+    }
+    if (status === "stale") {
+      return fail("Presence is stale and cannot support live legitimacy.");
+    }
+    if (status === "missing") {
+      return fail("Required presence is missing.");
+    }
     if (status === "not_required") {
       return fail("Request indicates a path requiring presence, but environment marks presence unavailable.");
     }
@@ -1080,17 +955,29 @@
     const commitId = String(input.request.Commit_ID || "").trim();
     const status = input.env.commitAuthenticity;
 
-    if (!commitRequired) return pass("Commit is not required for this request path under active class and policy.");
-    if (!commitId || commitId === "0" || commitId.toLowerCase() === "zero") return fail("Required commit artifact is absent.");
-    if (status === "authentic") return pass("Commit artifact is authentic and attributable.");
-    if (status === "invalid") return fail("Commit artifact fails authenticity validation.");
-    if (status === "uncertain") return uncertain("Commit artifact cannot be fully authenticated.");
+    if (!commitRequired) {
+      return pass("Commit is not required for this request path under active class and policy.");
+    }
+    if (!commitId || commitId === "0" || commitId.toLowerCase() === "zero") {
+      return fail("Required commit artifact is absent.");
+    }
+    if (status === "authentic") {
+      return pass("Commit artifact is authentic and attributable.");
+    }
+    if (status === "invalid") {
+      return fail("Commit artifact fails authenticity validation.");
+    }
+    if (status === "uncertain") {
+      return uncertain("Commit artifact cannot be fully authenticated.");
+    }
     return fail("Commit posture is incompatible with required consequence path.");
   }
 
   function evalCommitFreshness(input) {
     const commitRequired = isCommitRequired(input);
-    if (!commitRequired) return pass("Commit freshness is not required for this request path.");
+    if (!commitRequired) {
+      return pass("Commit freshness is not required for this request path.");
+    }
 
     const requestTime = toNumber(input.request.Timestamp, NaN);
     const currentTime = toNumber(input.env.currentEpoch, NaN);
@@ -1101,8 +988,12 @@
     }
 
     const age = currentTime - requestTime;
-    if (age < 0) return fail("Commit timestamp is in the future relative to evaluator clock.");
-    if (age > maxFreshness) return fail("Commit freshness window has lapsed by " + age + " seconds.");
+    if (age < 0) {
+      return fail("Commit timestamp is in the future relative to evaluator clock.");
+    }
+    if (age > maxFreshness) {
+      return fail("Commit freshness window has lapsed by " + age + " seconds.");
+    }
 
     return pass("Commit freshness window is satisfied (" + age + " sec age within " + maxFreshness + " sec limit).");
   }
@@ -1111,10 +1002,18 @@
     const commitRequired = isCommitRequired(input);
     const status = input.env.commitScopeStatus;
 
-    if (!commitRequired) return pass("Commit scope binding is not required for this request path.");
-    if (status === "bound") return pass("Commit scope is bound to the current request and target.");
-    if (status === "out_of_scope") return fail("Commit scope does not bind the requested effect.");
-    if (status === "uncertain") return uncertain("Commit scope binding cannot be conclusively established.");
+    if (!commitRequired) {
+      return pass("Commit scope binding is not required for this request path.");
+    }
+    if (status === "bound") {
+      return pass("Commit scope is bound to the current request and target.");
+    }
+    if (status === "out_of_scope") {
+      return fail("Commit scope does not bind the requested effect.");
+    }
+    if (status === "uncertain") {
+      return uncertain("Commit scope binding cannot be conclusively established.");
+    }
     return fail("Commit scope posture is incompatible with required consequence path.");
   }
 
@@ -1125,16 +1024,26 @@
     if (!isFiniteNumber(requestSeq) || !isFiniteNumber(lastSeq)) {
       return uncertain("Sequence posture cannot be fully evaluated because monotonic anchors are not numeric.");
     }
-    if (requestSeq < lastSeq) return fail("Sequence regresses below last accepted value.");
-    if (requestSeq === lastSeq) return fail("Sequence equals last accepted value and indicates replay risk.");
+    if (requestSeq < lastSeq) {
+      return fail("Sequence regresses below last accepted value.");
+    }
+    if (requestSeq === lastSeq) {
+      return fail("Sequence equals last accepted value and indicates replay risk.");
+    }
     return pass("Sequence is monotonic relative to last accepted anchor.");
   }
 
   function evalTimingValidity(input) {
     const timingStatus = input.env.timingStatus;
-    if (timingStatus === "valid") return pass("Evaluator clock posture is valid.");
-    if (timingStatus === "timeout") return fail("Timing posture indicates timeout / expired window.");
-    if (timingStatus === "skewed") return fail("Clock posture is skewed beyond accepted tolerance.");
+    if (timingStatus === "valid") {
+      return pass("Evaluator clock posture is valid.");
+    }
+    if (timingStatus === "timeout") {
+      return fail("Timing posture indicates timeout / expired window.");
+    }
+    if (timingStatus === "skewed") {
+      return fail("Clock posture is skewed beyond accepted tolerance.");
+    }
     return uncertain("Timing posture is not fully known.");
   }
 
@@ -1142,9 +1051,15 @@
     const required = hasFlag(input.request.Flags, "Reciprocity_Required");
     const status = input.env.reciprocityStatus;
 
-    if (!required || status === "not_required") return pass("Reciprocity is not required for this request path.");
-    if (status === "compatible") return pass("Reciprocity semantics are compatible.");
-    if (status === "incompatible") return fail("Reciprocity semantics are incompatible with consequence-bearing interaction.");
+    if (!required || status === "not_required") {
+      return pass("Reciprocity is not required for this request path.");
+    }
+    if (status === "compatible") {
+      return pass("Reciprocity semantics are compatible.");
+    }
+    if (status === "incompatible") {
+      return fail("Reciprocity semantics are incompatible with consequence-bearing interaction.");
+    }
     return uncertain("Reciprocity posture cannot be fully cleared.");
   }
 
@@ -1155,9 +1070,15 @@
     if (previousState === "NON_EXISTENT" || status === "none") {
       return pass("No parent-state dependency is required for this request path.");
     }
-    if (status === "valid") return pass("Parent-state dependency remains valid.");
-    if (status === "missing") return fail("Required parent-state dependency is missing.");
-    if (status === "invalid") return fail("Parent-state dependency is invalid.");
+    if (status === "valid") {
+      return pass("Parent-state dependency remains valid.");
+    }
+    if (status === "missing") {
+      return fail("Required parent-state dependency is missing.");
+    }
+    if (status === "invalid") {
+      return fail("Parent-state dependency is invalid.");
+    }
     return uncertain("Parent-state dependency cannot be fully validated.");
   }
 
@@ -1165,16 +1086,26 @@
     const persistenceRequested = String(input.env.persistenceRequested) === "yes" || hasFlag(input.request.Flags, "Persistent_Result_Expected");
     const status = input.env.supportSetStatus;
 
-    if (!persistenceRequested) return pass("Persistence is not requested for this path.");
-    if (status === "sufficient") return pass("Support set is sufficient for continuity initialization.");
-    if (status === "insufficient") return fail("Support set is insufficient for persistence legitimacy.");
+    if (!persistenceRequested) {
+      return pass("Persistence is not requested for this path.");
+    }
+    if (status === "sufficient") {
+      return pass("Support set is sufficient for continuity initialization.");
+    }
+    if (status === "insufficient") {
+      return fail("Support set is insufficient for persistence legitimacy.");
+    }
     return uncertain("Support set cannot be fully established.");
   }
 
   function evalIntegrity(input) {
     const status = input.env.integrityStatus;
-    if (status === "clean") return pass("Integrity posture is clean; no tamper indication is present.");
-    if (status === "tampered") return fail("Integrity fault / tamper indication blocks admissibility.");
+    if (status === "clean") {
+      return pass("Integrity posture is clean; no tamper indication is present.");
+    }
+    if (status === "tampered") {
+      return fail("Integrity fault / tamper indication blocks admissibility.");
+    }
     return uncertain("Integrity posture cannot be fully cleared.");
   }
 
@@ -1203,7 +1134,7 @@
     }
 
     if (mode === "DEGRADED_LEGITIMACY") {
-      if (level === "advisory_only" && ["B", "C", "D", "E", "F"].includes(actionClass)) {
+      if (level === "advisory_only" && (actionClass === "B" || actionClass === "C" || actionClass === "D" || actionClass === "E" || actionClass === "F")) {
         return fail("Degraded mode is restricted to advisory-class behavior.");
       }
       if (level === "block_c" && actionClass === "C") {
@@ -1234,21 +1165,30 @@
     const requested = hasFlag(input.request.Flags, "Export_Requested");
     const envExport = input.env.exportControl;
 
-    if (!requested) return pass("Export is not requested for this path.");
-    if (!input.policies.allowExport) return fail("Export is disabled by active policy profile.");
-    if (envExport === "allowed") return pass("Export may proceed under role-bounded visibility.");
-    if (envExport === "blocked") return fail("Export boundary blocks externalization.");
+    if (!requested) {
+      return pass("Export is not requested for this path.");
+    }
+    if (!input.policies.allowExport) {
+      return fail("Export is disabled by active policy profile.");
+    }
+    if (envExport === "allowed") {
+      return pass("Export may proceed under role-bounded visibility.");
+    }
+    if (envExport === "blocked") {
+      return fail("Export boundary blocks externalization.");
+    }
     return uncertain("Export posture is review-bound rather than immediately clear.");
   }
 
   // ---------------------------------------------------------------------------
-  // Decision logic
+  // Decision Logic
   // ---------------------------------------------------------------------------
 
   function resolveDisposition(predicates, input) {
+    const failIds = getPredicateIdsByResult(predicates, "fail");
+    const uncertainIds = getPredicateIdsByResult(predicates, "uncertain");
     const actionClass = normalizeActionClass(input.request.Action_Class);
     const persistenceRequested = String(input.env.persistenceRequested) === "yes" || hasFlag(input.request.Flags, "Persistent_Result_Expected");
-    const uncertainIds = getPredicateIdsByResult(predicates, "uncertain");
 
     if (predicateFailed(predicates, "PF-14")) {
       if (input.policies.downgradeOnModeRestriction) {
@@ -1285,24 +1225,22 @@
       };
     }
 
-    const replayOrAmbiguity =
+    const replayish =
       predicateFailed(predicates, "PF-06") ||
       predicateFailed(predicates, "PF-08") ||
       predicateUncertain(predicates, "PF-05") ||
       predicateUncertain(predicates, "PF-13");
 
-    if (replayOrAmbiguity) {
+    if (replayish) {
       if (input.policies.quarantineOnReplay) {
         return {
           disposition: "QUARANTINE",
           reasonCode: "QUARANTINE_REPLAY_INTEGRITY_UNCERTAINTY",
           primaryPredicate: predicateFailed(predicates, "PF-06")
             ? "PF-06"
-            : predicateFailed(predicates, "PF-08")
-            ? "PF-08"
-            : predicateUncertain(predicates, "PF-05")
-            ? "PF-05"
-            : "PF-13",
+            : (predicateFailed(predicates, "PF-08")
+              ? "PF-08"
+              : (predicateUncertain(predicates, "PF-05") ? "PF-05" : "PF-13")),
           narrative: "Replay, freshness, or integrity ambiguity prevents trusted consequence."
         };
       }
@@ -1360,6 +1298,15 @@
       };
     }
 
+    if (failIds.length > 0) {
+      return {
+        disposition: "DENY",
+        reasonCode: "DENY_GENERAL_FAILURE",
+        primaryPredicate: failIds[0],
+        narrative: "A predicate failure prevents legitimate consequence."
+      };
+    }
+
     if (actionClass === "A") {
       return {
         disposition: "ALLOW",
@@ -1378,7 +1325,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // State resolution
+  // State Resolution
   // ---------------------------------------------------------------------------
 
   function resolveState(decision, predicates, input) {
@@ -1387,7 +1334,7 @@
     const actionClass = normalizeActionClass(input.request.Action_Class);
 
     let intermediate = null;
-    let after = transitionFrom(before, decision.disposition);
+    let after = "STAGED";
     let reason = "";
 
     switch (decision.disposition) {
@@ -1403,26 +1350,32 @@
         break;
 
       case "DENY":
+        after = "INVALID";
         reason = "Requested effect is blocked before legitimate consequence can form.";
         break;
 
       case "STAGE":
+        after = "STAGED";
         reason = "Path is held in governed staging rather than admitted or denied outright.";
         break;
 
       case "DOWNGRADE":
-        reason = "Path cannot retain full legitimacy class under current mode and is downgraded.";
+        after = "DEGRADED";
+        reason = "Path cannot retain full legitimacy class under current mode and is downgraded into a bounded degraded posture.";
         break;
 
       case "QUARANTINE":
-        reason = "Uncertainty / replay / integrity ambiguity forces isolated non-consequence posture.";
+        after = "QUARANTINED";
+        reason = "Uncertainty, replay, freshness, or integrity ambiguity forces isolated non-consequence posture.";
         break;
 
       case "TERMINATE":
+        after = "TERMINATED";
         reason = "Termination posture extinguishes the path due to blocking system fault or governed end condition.";
         break;
 
       case "PRESERVE_FOR_REVIEW":
+        after = "ESCROW";
         reason = "Materials are retained in protected review posture rather than persisted as live consequence.";
         break;
 
@@ -1440,13 +1393,8 @@
     };
   }
 
-  function transitionFrom(currentState, disposition) {
-    const table = TRANSITION_MATRIX[currentState] || TRANSITION_MATRIX.NON_EXISTENT;
-    return table[disposition] || "TRANSITIONAL";
-  }
-
   // ---------------------------------------------------------------------------
-  // Support-set and audit
+  // Support Set / Audit
   // ---------------------------------------------------------------------------
 
   function buildSupportSet(predicates, input, decision, state) {
@@ -1486,8 +1434,8 @@
       Action_Class: normalizeActionClass(input.request.Action_Class),
       Identity_Class: normalizeIdentityClass(input.request.Identity_Class),
       State_Class_Before: state.stateBefore,
-      Intermediate_State: state.intermediateState,
       State_Class_After: state.stateAfter,
+      Intermediate_State: state.intermediateState,
       Decision_Result: decision.disposition,
       Reason_Code: decision.reasonCode,
       Primary_Predicate: decision.primaryPredicate,
@@ -1499,7 +1447,9 @@
       Reciprocity_Required: hasFlag(input.request.Flags, "Reciprocity_Required"),
       Persistence_Requested: String(input.env.persistenceRequested) === "yes" || hasFlag(input.request.Flags, "Persistent_Result_Expected"),
       Export_Requested: hasFlag(input.request.Flags, "Export_Requested"),
-      Visibility_Class: decision.disposition === "ALLOW" && predicatePassed(predicates, "PF-16") ? "ROLE_BOUNDED_EXPORT" : "RESTRICTED_REVIEW",
+      Visibility_Class: decision.disposition === "ALLOW" && predicatePassed(predicates, "PF-16")
+        ? "ROLE_BOUNDED_EXPORT"
+        : "RESTRICTED_REVIEW",
       Uncertainty_Flag: uncertainty,
       Chain_of_Custody_Anchor: "ANCHOR-" + sanitizeAnchor(input.request.Request_ID) + "-" + auditEvent,
       Predicate_Vector: Object.fromEntries(
@@ -1510,7 +1460,7 @@
       Policies: deepClone(input.policies),
       Environment: deepClone(input.env),
       Support_Set: deepClone(supportSet),
-      Public_Build_Boundary: "Build 1 browser adjudication runtime; conceptual hardware-aligned views remain explanatory."
+      Public_Build_Boundary: "Build 1 browser adjudication reference runtime; conceptual hardware-aligned views remain explanatory and this build is not RTL, ASIC, or fabrication proof."
     };
   }
 
@@ -1536,7 +1486,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Rendering
+  // Decision Surface / Predicate / Ledger Rendering
   // ---------------------------------------------------------------------------
 
   function renderDecisionSurface() {
@@ -1547,11 +1497,7 @@
     if (els.auditEventOut) els.auditEventOut.textContent = lastEvaluation.audit.Event_Class;
 
     if (els.reasonBadge) {
-      const primary =
-        lastEvaluation.predicates[lastEvaluation.decision.primaryPredicate] || {
-          result: "pending",
-          reason: "No primary predicate available."
-        };
+      const primary = lastEvaluation.predicates[lastEvaluation.decision.primaryPredicate] || { result: "pending", reason: "No primary predicate available." };
       els.reasonBadge.textContent = primary.reason;
       els.reasonBadge.className = "pill " + (primary.result === "pass" ? "accent" : "neutral");
     }
@@ -1603,7 +1549,7 @@
       els.ledgerSummary.textContent =
         "Continuity truth is not presumed. Persistence remains conditional until the request has been fully adjudicated and support-set truth is evaluated.";
       els.supportGrid.innerHTML = "";
-      [
+      const pendingKeys = [
         "authority_validity",
         "authority_scope",
         "presence_sufficiency",
@@ -1617,7 +1563,8 @@
         "integrity_status",
         "persistence_support",
         "export_eligibility"
-      ].forEach(function (key) {
+      ];
+      pendingKeys.forEach(function (key) {
         const card = document.createElement("div");
         card.className = "support-card";
         card.innerHTML =
@@ -1631,15 +1578,10 @@
     const cadence = lastEvaluation.input.cadence.value + " " + lastEvaluation.input.cadence.unit;
     els.ledgerSummary.innerHTML =
       "Continuity review is explicit. Persistence is treated as <strong>conditional, not inertial</strong>. " +
-      "Disposition resolves as <strong>" +
-      escapeHtml(lastEvaluation.decision.disposition) +
-      "</strong> with resulting state <strong>" +
-      escapeHtml(lastEvaluation.state.stateAfter) +
-      "</strong> under operating mode <strong>" +
-      escapeHtml(lastEvaluation.input.mode) +
-      "</strong>. Current cadence: <strong>" +
-      escapeHtml(cadence) +
-      "</strong>.";
+      "Disposition resolves as <strong>" + escapeHtml(lastEvaluation.decision.disposition) + "</strong> with resulting state " +
+      "<strong>" + escapeHtml(lastEvaluation.state.stateAfter) + "</strong> under operating mode " +
+      "<strong>" + escapeHtml(lastEvaluation.input.mode) + "</strong>. Current cadence: <strong>" +
+      escapeHtml(cadence) + "</strong>.";
 
     els.supportGrid.innerHTML = "";
     Object.entries(lastEvaluation.supportSet).forEach(function (entry) {
@@ -1657,13 +1599,11 @@
   function renderSignals() {
     if (!els.signalGrid) return;
 
-    const evalOrPlaceholder =
-      lastEvaluation ||
-      {
-        input: snapshotScenarioInput(),
-        decision: { disposition: "PENDING" },
-        state: { stateAfter: currentScenario.env ? currentScenario.env.previousStateClass : "NON_EXISTENT" }
-      };
+    const evalOrPlaceholder = lastEvaluation || {
+      input: snapshotScenarioInput(),
+      decision: { disposition: "PENDING" },
+      state: { stateAfter: currentScenario.env ? currentScenario.env.previousStateClass : "NON_EXISTENT" }
+    };
 
     const signals = {
       GOV_CLK: "250 MHz nominal",
@@ -1691,90 +1631,8 @@
     });
   }
 
-  function renderQueue() {
-    if (!els.queueSummary || !els.queueList) return;
-
-    els.queueSummary.textContent = "Queue depth: " + requestQueue.length;
-    els.queueList.innerHTML = "";
-
-    requestQueue.forEach(function (item, index) {
-      const li = document.createElement("li");
-      li.innerHTML =
-        '<div class="trace-time">#' + (index + 1) + "</div>" +
-        '<div class="trace-msg">' + escapeHtml(item.name) + " • " + escapeHtml(item.request.Request_ID) + "</div>";
-      els.queueList.appendChild(li);
-    });
-  }
-
-  function renderPacketView() {
-    if (!els.packetView) return;
-
-    els.packetView.innerHTML = "";
-    PACKET_FIELDS.forEach(function (field) {
-      const row = document.createElement("div");
-      row.className = "packet-row";
-      row.innerHTML =
-        '<div class="mono">' + escapeHtml(field[0]) + "</div>" +
-        '<div class="mono faint">' + escapeHtml(field[1]) + "</div>" +
-        "<div>" + escapeHtml(field[2]) + "</div>";
-      els.packetView.appendChild(row);
-    });
-  }
-
-  function renderRegisterView() {
-    if (!els.registerBody) return;
-
-    els.registerBody.innerHTML = "";
-    REGISTERS.forEach(function (reg) {
-      const row = document.createElement("tr");
-      row.innerHTML =
-        '<td class="mono">' + escapeHtml(reg[0]) + "</td>" +
-        "<td>" + escapeHtml(reg[1]) + "</td>" +
-        "<td>" + escapeHtml(reg[2]) + "</td>" +
-        "<td>" + escapeHtml(reg[3]) + "</td>";
-      els.registerBody.appendChild(row);
-    });
-  }
-
-  function renderTransitionMatrix() {
-    if (!els.transitionBody) return;
-
-    els.transitionBody.innerHTML = "";
-    TRANSITION_TABLE_VIEW.forEach(function (rowData) {
-      const row = document.createElement("tr");
-      row.innerHTML = rowData
-        .map(function (cell, index) {
-          return index === 0 ? "<td>" + escapeHtml(cell) + "</td>" : '<td class="mono">' + escapeHtml(cell) + "</td>";
-        })
-        .join("");
-      els.transitionBody.appendChild(row);
-    });
-  }
-
-  function renderAdversarialList() {
-    if (!els.adversarialList) return;
-
-    els.adversarialList.innerHTML = "";
-    ADVERSARIAL_TESTS.forEach(function (pair) {
-      const name = pair[0];
-      const desc = pair[1];
-      const item = document.createElement("div");
-      item.className = "adversarial-item";
-      item.innerHTML =
-        '<div class="mono">' + escapeHtml(name) + "</div>" +
-        '<div class="mono faint">test</div>' +
-        "<div>" + escapeHtml(desc) + "</div>";
-
-      item.addEventListener("click", function () {
-        applyAdversarialPreset(name);
-      });
-
-      els.adversarialList.appendChild(item);
-    });
-  }
-
   // ---------------------------------------------------------------------------
-  // Queue / import / export
+  // Queue / Import / Export
   // ---------------------------------------------------------------------------
 
   function queueCurrentRequest() {
@@ -1803,7 +1661,6 @@
     const existingIndex = scenarioLibrary.findIndex(function (item) {
       return item.id === next.id;
     });
-
     if (existingIndex >= 0) {
       scenarioLibrary[existingIndex] = deepClone(next);
     } else {
@@ -1814,6 +1671,21 @@
     renderQueue();
     loadScenario(next.id);
     trace("Queue drained into active scenario: " + next.request.Request_ID + ".");
+  }
+
+  function renderQueue() {
+    if (!els.queueSummary || !els.queueList) return;
+
+    els.queueSummary.textContent = "Queue depth: " + requestQueue.length;
+    els.queueList.innerHTML = "";
+
+    requestQueue.forEach(function (item, index) {
+      const li = document.createElement("li");
+      li.innerHTML =
+        '<div class="trace-time">#' + (index + 1) + "</div>" +
+        '<div class="trace-msg">' + escapeHtml(item.name) + " • " + escapeHtml(item.request.Request_ID) + "</div>";
+      els.queueList.appendChild(li);
+    });
   }
 
   function exportScenarioJson() {
@@ -1852,7 +1724,7 @@
     reader.onload = function () {
       try {
         const parsed = JSON.parse(String(reader.result));
-        parsed.id = parsed.id || "imported-" + Date.now();
+        parsed.id = parsed.id || ("imported-" + Date.now());
         parsed.name = parsed.name || "Imported Scenario";
         parsed.mode = parsed.mode || "FULL_LEGITIMACY";
         parsed.request = parsed.request || {};
@@ -1872,41 +1744,106 @@
     event.target.value = "";
   }
 
+  // ---------------------------------------------------------------------------
+  // Conceptual Views
+  // ---------------------------------------------------------------------------
+
+  function renderPacketView() {
+    if (!els.packetView) return;
+
+    els.packetView.innerHTML = "";
+    PACKET_FIELDS.forEach(function (field) {
+      const row = document.createElement("div");
+      row.className = "packet-row";
+      row.innerHTML =
+        '<div class="mono">' + escapeHtml(field[0]) + "</div>" +
+        '<div class="mono faint">' + escapeHtml(field[1]) + "</div>" +
+        "<div>" + escapeHtml(field[2]) + "</div>";
+      els.packetView.appendChild(row);
+    });
+  }
+
+  function renderRegisterView() {
+    if (!els.registerBody) return;
+
+    els.registerBody.innerHTML = "";
+    REGISTERS.forEach(function (reg) {
+      const row = document.createElement("tr");
+      row.innerHTML =
+        '<td class="mono">' + escapeHtml(reg[0]) + "</td>" +
+        "<td>" + escapeHtml(reg[1]) + "</td>" +
+        "<td>" + escapeHtml(reg[2]) + "</td>" +
+        "<td>" + escapeHtml(reg[3]) + "</td>";
+      els.registerBody.appendChild(row);
+    });
+  }
+
+  function renderTransitionMatrix() {
+    if (!els.transitionBody) return;
+
+    els.transitionBody.innerHTML = "";
+    TRANSITION_TABLE_VIEW.forEach(function (rowData) {
+      const row = document.createElement("tr");
+      row.innerHTML = rowData.map(function (cell, index) {
+        return index === 0 ? "<td>" + escapeHtml(cell) + "</td>" : '<td class="mono">' + escapeHtml(cell) + "</td>";
+      }).join("");
+      els.transitionBody.appendChild(row);
+    });
+  }
+
+  function renderAdversarialList() {
+    if (!els.adversarialList) return;
+
+    els.adversarialList.innerHTML = "";
+    ADVERSARIAL_TESTS.forEach(function (pair) {
+      const name = pair[0];
+      const desc = pair[1];
+      const item = document.createElement("div");
+      item.className = "adversarial-item";
+      item.innerHTML =
+        '<div class="mono">' + escapeHtml(name) + "</div>" +
+        '<div class="mono faint">test</div>' +
+        "<div>" + escapeHtml(desc) + "</div>";
+
+      item.addEventListener("click", function () {
+        applyAdversarialPreset(name);
+      });
+
+      els.adversarialList.appendChild(item);
+    });
+  }
+
   function applyAdversarialPreset(name) {
     switch (name) {
       case "Replay Attack":
         currentScenario.request.Sequence_Number = String(currentScenario.env.lastSequenceSeen);
         currentScenario.env.commitAuthenticity = "uncertain";
+        currentScenario.env.commitScopeStatus = "uncertain";
         currentScenario.env.supportSetStatus = "insufficient";
         break;
-
       case "Privilege Drift":
         currentScenario.env.scopeStatus = "out_of_scope";
         currentScenario.env.revocationStatus = "active";
         break;
-
       case "Silent Persistence":
         currentScenario.env.persistenceRequested = "yes";
         currentScenario.env.supportSetStatus = "insufficient";
         break;
-
       case "Reciprocity Mismatch":
         currentScenario.request.Flags = addFlag(currentScenario.request.Flags, "Reciprocity_Required");
         currentScenario.env.reciprocityStatus = "incompatible";
         break;
-
       case "Mode Masquerade":
         currentScenario.mode = "DEGRADED_LEGITIMACY";
         if (els.modeSelect) els.modeSelect.value = "DEGRADED_LEGITIMACY";
         currentScenario.env.degradedConstraintLevel = "block_c";
         break;
-
       case "Ghost Resurrection":
         currentScenario.env.previousStateClass = "PERSISTENT";
         currentScenario.env.parentStateStatus = "invalid";
         currentScenario.env.persistenceRequested = "yes";
+        currentScenario.env.supportSetStatus = "insufficient";
         break;
-
       default:
         break;
     }
@@ -1924,36 +1861,17 @@
   function trace(message) {
     if (!els.traceList) return;
     traceTick += 1;
-
     const entry = document.createElement("li");
     entry.innerHTML =
       '<div class="trace-time">T+' + String(traceTick).padStart(2, "0") + "</div>" +
       '<div class="trace-msg">' + escapeHtml(message) + "</div>";
-
     els.traceList.prepend(entry);
   }
 
   function tracePredicateSummaries() {
     if (!lastEvaluation) return;
-
-    [
-      "PF-01",
-      "PF-02",
-      "PF-03",
-      "PF-04",
-      "PF-05",
-      "PF-06",
-      "PF-07",
-      "PF-08",
-      "PF-09",
-      "PF-10",
-      "PF-11",
-      "PF-12",
-      "PF-13",
-      "PF-14",
-      "PF-15",
-      "PF-16"
-    ].forEach(function (id) {
+    const ordered = ["PF-01", "PF-02", "PF-03", "PF-04", "PF-05", "PF-06", "PF-07", "PF-08", "PF-09", "PF-10", "PF-11", "PF-12", "PF-13", "PF-14", "PF-15", "PF-16"];
+    ordered.forEach(function (id) {
       const p = lastEvaluation.predicates[id];
       if (!p) return;
       trace(id + " → " + safeUpper(p.result) + " — " + p.reason);
@@ -1961,7 +1879,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Helpers
+  // Utility / Normalization
   // ---------------------------------------------------------------------------
 
   function normalizeEnv(env) {
@@ -1971,11 +1889,9 @@
       const defaultValue = field[3];
       out[key] = env && env[key] != null ? String(env[key]) : String(defaultValue);
     });
-
     if (!STATES.includes(out.previousStateClass)) {
       out.previousStateClass = "NON_EXISTENT";
     }
-
     return out;
   }
 
@@ -1998,21 +1914,18 @@
   function isCommitRequired(input) {
     const actionClass = normalizeActionClass(input.request.Action_Class);
     if (actionClass === "C" && !!input.policies.requireCommitForClassC) return true;
-
-    const commitId = String(input.request.Commit_ID || "").trim();
-    return commitId !== "" && commitId !== "0";
+    return String(input.request.Commit_ID || "").trim() !== "" && String(input.request.Commit_ID || "").trim() !== "0";
   }
 
   function hasFlag(flags, name) {
-    return String(flags || "").toLowerCase().indexOf(String(name).toLowerCase()) !== -1;
+    const raw = String(flags || "");
+    return raw.toLowerCase().indexOf(String(name).toLowerCase()) !== -1;
   }
 
   function addFlag(flags, name) {
     const items = String(flags || "")
       .split("|")
-      .map(function (s) {
-        return s.trim();
-      })
+      .map(function (s) { return s.trim(); })
       .filter(Boolean);
 
     const exists = items.some(function (item) {
@@ -2024,15 +1937,15 @@
   }
 
   function predicatePassed(predicates, id) {
-    return !!(predicates[id] && predicates[id].result === "pass");
+    return predicates[id] && predicates[id].result === "pass";
   }
 
   function predicateFailed(predicates, id) {
-    return !!(predicates[id] && predicates[id].result === "fail");
+    return predicates[id] && predicates[id].result === "fail";
   }
 
   function predicateUncertain(predicates, id) {
-    return !!(predicates[id] && predicates[id].result === "uncertain");
+    return predicates[id] && predicates[id].result === "uncertain";
   }
 
   function getPredicateIdsByResult(predicates, result) {
@@ -2076,16 +1989,16 @@
     return typeof value === "number" && Number.isFinite(value);
   }
 
-  function sanitizeAnchor(value) {
-    return String(value || "UNKNOWN").replace(/[^A-Za-z0-9_-]/g, "_");
-  }
-
   function safeUpper(value) {
     return String(value || "").toUpperCase();
   }
 
   function formatKey(value) {
     return String(value).replace(/_/g, " ");
+  }
+
+  function sanitizeAnchor(value) {
+    return String(value || "UNKNOWN").replace(/[^A-Za-z0-9_-]/g, "_");
   }
 
   function cssEscapeSafe(value) {
@@ -2116,13 +2029,12 @@
   }
 
   // ---------------------------------------------------------------------------
-  // Background visual
+  // Background Visual
   // ---------------------------------------------------------------------------
 
   function setupStarfield() {
     const canvas = byId("starfield");
     if (!canvas) return;
-
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -2154,20 +2066,17 @@
 
     function draw() {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
       stars.forEach(function (star) {
         star.y += star.drift;
         if (star.y > window.innerHeight + 10) {
           star.y = -10;
           star.x = Math.random() * window.innerWidth;
         }
-
         ctx.beginPath();
         ctx.fillStyle = "rgba(220, 235, 255, " + star.a + ")";
         ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
         ctx.fill();
       });
-
       animationId = requestAnimationFrame(draw);
     }
 
