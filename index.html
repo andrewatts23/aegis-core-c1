@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
   <title>AEGIS-CORE C1 — Constitutional-Compute Reference Artifact</title>
   <meta
     name="description"
     content="AEGIS-CORE C1 static constitutional-compute reference artifact for admissibility-governed state formation, bounded consequence, continuity-governed persistence, and governance-meaningful audit."
   />
+  <meta name="theme-color" content="#040814" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -24,14 +28,13 @@
 
   <header class="topbar">
     <div class="brand">
-      <div class="brand-mark">A</div>
+      <div class="brand-mark" aria-hidden="true">A</div>
       <div class="brand-copy">
         <div class="eyebrow">Continuity-Governed Admissibility Processor</div>
         <h1>AEGIS-CORE C1</h1>
         <p class="subline">
-          Static constitutional-compute reference artifact for admissibility,
-          bounded consequence, continuity-governed persistence, and
-          governance-meaningful audit.
+          Public browser adjudication runtime for admissibility, bounded consequence,
+          continuity-governed persistence, and governance-meaningful audit.
         </p>
       </div>
     </div>
@@ -40,17 +43,22 @@
   <main class="shell">
     <section class="hero panel">
       <div class="hero-copy">
-        <div class="hero-kicker">Not a dashboard. A governed reality engine.</div>
+        <div class="hero-kicker">Not a dashboard. A governed adjudication runtime.</div>
         <h2>
           Computation does not become real here until legitimacy has been earned.
         </h2>
         <p>
-          Requests enter through a governed boundary, move through explicit predicate
-          scrutiny, resolve into admissibility, and either cross into bounded
-          consequence or get denied, staged, downgraded, quarantined, terminated,
-          or preserved for review. Persistence is then forced through support-set
-          truth instead of surviving by inertia.
+          This build presents AEGIS-CORE C1 as a public technical reference runtime.
+          Requests are evaluated through explicit predicates, resolved into governed
+          disposition, transitioned into machine-significant state, and recorded in
+          a legitimacy record that preserves governance meaning rather than mere chronology.
         </p>
+        <div class="hero-boundary">
+          <span class="pill accent">Build 1</span>
+          <span class="pill neutral">Live Predicate Runtime</span>
+          <span class="pill neutral">Public Review Layer</span>
+          <span class="pill neutral">Not RTL / ASIC / Fabrication</span>
+        </div>
       </div>
 
       <div class="hero-stats">
@@ -63,8 +71,8 @@
           <strong>PF-01 → PF-16</strong>
         </article>
         <article class="stat-card">
-          <span class="stat-label">Queue Model</span>
-          <strong>Multi-Request</strong>
+          <span class="stat-label">Runtime Truth</span>
+          <strong>Input-Driven</strong>
         </article>
         <article class="stat-card">
           <span class="stat-label">Audit Doctrine</span>
@@ -76,9 +84,9 @@
     <section class="release-strip panel">
       <div class="release-strip-inner">
         <span class="pill accent">Reference Build</span>
-        <span class="pill neutral">Static Simulator</span>
-        <span class="pill neutral">Public Review Layer</span>
-        <span class="pill neutral">Not RTL / ASIC</span>
+        <span class="pill neutral">Browser Adjudication Runtime</span>
+        <span class="pill neutral">Public Technical Review</span>
+        <span class="pill neutral">Conceptual Hardware Views Included</span>
       </div>
     </section>
 
@@ -93,17 +101,27 @@
             <article class="start-card">
               <span class="tiny-label">Scenario 01</span>
               <strong>ALLOW</strong>
-              <p>Valid authority, valid presence, valid commit, valid sequence, valid persistence support.</p>
+              <p>
+                Valid authority, valid presence, authentic commit, monotonic sequence,
+                and sufficient continuity support.
+              </p>
             </article>
+
             <article class="start-card">
               <span class="tiny-label">Scenario 02</span>
               <strong>DENY</strong>
-              <p>Authority and scope fail before consequence can form.</p>
+              <p>
+                Authority and scope fail before consequence can form.
+              </p>
             </article>
+
             <article class="start-card">
               <span class="tiny-label">Scenario 03</span>
               <strong>QUARANTINE</strong>
-              <p>Replay / lineage / integrity ambiguity is isolated instead of treated as valid consequence.</p>
+              <p>
+                Replay / freshness / integrity ambiguity is isolated instead of
+                flattened into false validity.
+              </p>
             </article>
           </div>
         </div>
@@ -116,9 +134,11 @@
         </div>
         <div class="panel-body">
           <div class="action-note">
-            Start with Scenario 01, then Scenario 02, then Scenario 03 to see the
-            three core constitutional branches: ALLOW, DENY, and QUARANTINE.
+            Start with Scenario 01, then Scenario 02, then Scenario 03. This build
+            computes predicate and decision outcomes from live request, policy, and
+            environment inputs rather than scripted end states.
           </div>
+
           <div class="action-grid">
             <button id="runBtn" class="btn btn-primary" type="button">Run</button>
             <button id="stepBtn" class="btn btn-secondary" type="button">Step</button>
@@ -140,23 +160,31 @@
         <section class="panel">
           <div class="panel-head">
             <h3>Scenario Control</h3>
-            <span class="pill accent">Complete Build</span>
+            <span class="pill accent">Build 1 Runtime</span>
           </div>
 
           <div class="panel-body form-grid">
             <label class="field full">
               <span>Scenario</span>
-              <select id="scenarioSelect"></select>
+              <select id="scenarioSelect" aria-label="Scenario selection"></select>
             </label>
 
             <label class="field">
               <span>Playback Speed</span>
-              <input id="speedRange" type="range" min="250" max="1400" step="50" value="650" />
+              <input
+                id="speedRange"
+                type="range"
+                min="250"
+                max="1400"
+                step="50"
+                value="650"
+                aria-label="Playback speed"
+              />
             </label>
 
             <label class="field">
               <span>Mode Override</span>
-              <select id="modeSelect">
+              <select id="modeSelect" aria-label="Mode override">
                 <option value="FULL_LEGITIMACY">FULL_LEGITIMACY</option>
                 <option value="DEGRADED_LEGITIMACY">DEGRADED_LEGITIMACY</option>
                 <option value="QUARANTINE_MODE">QUARANTINE_MODE</option>
@@ -167,12 +195,20 @@
 
             <label class="field">
               <span>Cadence Interval</span>
-              <input id="cadenceInput" type="number" min="1" step="1" value="15" />
+              <input
+                id="cadenceInput"
+                type="number"
+                min="1"
+                step="1"
+                value="15"
+                inputmode="numeric"
+                aria-label="Cadence interval"
+              />
             </label>
 
             <label class="field">
               <span>Cadence Unit</span>
-              <select id="cadenceUnit">
+              <select id="cadenceUnit" aria-label="Cadence unit">
                 <option value="seconds">seconds</option>
                 <option value="minutes">minutes</option>
                 <option value="cycles">cycles</option>
@@ -181,7 +217,11 @@
 
             <label class="field full">
               <span>Scenario Thesis</span>
-              <textarea id="scenarioNarrative" rows="6"></textarea>
+              <textarea
+                id="scenarioNarrative"
+                rows="6"
+                aria-label="Scenario thesis"
+              ></textarea>
             </label>
           </div>
         </section>
@@ -213,10 +253,12 @@
               <span class="tiny-label">Disposition</span>
               <strong id="dispositionOut">—</strong>
             </article>
+
             <article class="decision-card">
               <span class="tiny-label">Resulting State</span>
               <strong id="stateOut">—</strong>
             </article>
+
             <article class="decision-card">
               <span class="tiny-label">Audit Event</span>
               <strong id="auditEventOut">—</strong>
@@ -245,7 +287,7 @@
           <section class="panel">
             <div class="panel-head">
               <h3>Predicate Matrix</h3>
-              <span class="mono faint">Live authoring enabled</span>
+              <span class="mono faint">Computed from live inputs</span>
             </div>
             <div class="panel-body table-wrap">
               <table class="predicate-table">
@@ -271,7 +313,7 @@
             <div class="panel-body">
               <div id="stateGrid" class="state-grid"></div>
               <div id="transitionNote" class="transition-note">
-                No transition has been evaluated yet.
+                No governed transition has been evaluated yet.
               </div>
             </div>
           </section>
@@ -292,7 +334,7 @@
           <section class="panel">
             <div class="panel-head">
               <h3>Request Queue</h3>
-              <span class="mono faint">Multi-request flow</span>
+              <span class="mono faint">Browser request harness</span>
             </div>
             <div class="panel-body">
               <div id="queueSummary" class="queue-summary">Queue depth: 0</div>
@@ -302,8 +344,8 @@
 
           <section class="panel">
             <div class="panel-head">
-              <h3>FPGA-Aligned Signals</h3>
-              <span class="mono faint">Conceptual signal view</span>
+              <h3>Conceptual Signals</h3>
+              <span class="mono faint">Public runtime instrumentation</span>
             </div>
             <div class="panel-body">
               <div id="signalGrid" class="signal-grid"></div>
@@ -377,14 +419,16 @@
             <span class="mono faint">Meaning, not mere chronology</span>
           </div>
           <div class="panel-body">
-            <pre id="auditRecord" class="audit-record">Run a scenario to generate the audit record.</pre>
+            <pre id="auditRecord" class="audit-record">
+Run a scenario to generate the computed legitimacy record.
+            </pre>
           </div>
         </section>
 
         <section class="panel">
           <div class="panel-head">
             <h3>Execution Trace</h3>
-            <span class="mono faint">Narrated event stream</span>
+            <span class="mono faint">Causal event stream</span>
           </div>
           <div class="panel-body">
             <ol id="traceList" class="trace-list"></ol>
@@ -395,7 +439,7 @@
   </main>
 
   <footer class="footer">
-    <span>AEGIS-CORE C1 constitutional-compute reference artifact.</span>
+    <span>AEGIS-CORE C1 browser adjudication reference artifact.</span>
     <span class="mono faint">HTML • CSS • JavaScript • GitHub Pages ready</span>
   </footer>
 
