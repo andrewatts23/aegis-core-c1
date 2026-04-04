@@ -48,15 +48,15 @@
         <h2>Computation does not become real here until legitimacy has been earned.</h2>
         <p>
           This build presents AEGIS-CORE C1 as a public browser runtime in which editable
-          request, policy, and evaluation-context inputs drive predicate computation,
-          disposition resolution, state transition posture, continuity review, and a
-          governance-meaningful legitimacy record.
+          request, policy, evaluation-context, and structured runtime script inputs drive
+          predicate computation, disposition resolution, state transition posture,
+          continuity review, and a governance-meaningful legitimacy record.
         </p>
 
         <div class="hero-boundary">
           <span class="pill accent">Build 1</span>
           <span class="pill neutral">Live Predicate Runtime</span>
-          <span class="pill neutral">Public Review Layer</span>
+          <span class="pill neutral">Structured Script Input</span>
           <span class="pill neutral">Not RTL / ASIC / Fabrication</span>
         </div>
       </div>
@@ -75,8 +75,8 @@
           <strong>Input-Driven</strong>
         </article>
         <article class="stat-card">
-          <span class="stat-label">Audit Doctrine</span>
-          <strong>Governance Meaning</strong>
+          <span class="stat-label">Reviewer Surface</span>
+          <strong>Script + Forms</strong>
         </article>
       </div>
     </section>
@@ -85,8 +85,8 @@
       <div class="release-strip-inner">
         <span class="pill accent">Reference Build</span>
         <span class="pill neutral">Browser Adjudication Runtime</span>
+        <span class="pill neutral">Live Structured Script Input</span>
         <span class="pill neutral">Public Technical Review</span>
-        <span class="pill neutral">Conceptual Hardware Views Included</span>
       </div>
     </section>
 
@@ -134,9 +134,8 @@
         </div>
         <div class="panel-body">
           <div class="action-note">
-            Start with Scenario 01, then Scenario 02, then Scenario 03. This build
-            computes runtime results from live inputs rather than only replaying
-            pre-authored outcomes.
+            You can review this build in two ways: edit the live forms directly, or edit
+            the structured runtime script and apply it into the engine before running.
           </div>
 
           <div class="action-grid">
@@ -223,6 +222,80 @@
                 aria-label="Scenario thesis"
               ></textarea>
             </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Structured Runtime Script</h3>
+            <span class="mono faint">Live reviewer input surface</span>
+          </div>
+          <div class="panel-body">
+            <div class="action-note">
+              Edit the script below, apply it into the runtime, then run the engine.
+              This is a real input surface for the same adjudication fields shown below.
+            </div>
+
+            <label class="field full">
+              <span>Runtime Script</span>
+              <textarea
+                id="runtimeScript"
+                class="script-box mono"
+                rows="20"
+                spellcheck="false"
+                aria-label="Structured runtime script"
+              >MODE=FULL_LEGITIMACY
+
+REQUEST.Request_ID=0xA1000001
+REQUEST.Domain_ID=0x0042
+REQUEST.Action_Class=C
+REQUEST.Identity_Class=A1
+REQUEST.Target_State_ID=0x0000000000000000
+REQUEST.Commit_ID=0xC0MM17A1
+REQUEST.Sequence_Number=1024
+REQUEST.Flags=Presence_Required | Reciprocity_Required | Persistent_Result_Expected | Export_Requested
+REQUEST.Timestamp=1712051000
+
+ENV.currentEpoch=1712051060
+ENV.maxFreshnessSec=900
+ENV.lastSequenceSeen=1023
+ENV.revocationStatus=active
+ENV.scopeStatus=in_scope
+ENV.presenceStatus=live
+ENV.commitAuthenticity=authentic
+ENV.commitScopeStatus=bound
+ENV.timingStatus=valid
+ENV.reciprocityStatus=compatible
+ENV.parentStateStatus=none
+ENV.integrityStatus=clean
+ENV.supportSetStatus=sufficient
+ENV.exportControl=allowed
+ENV.protectedUserMode=not_invoked
+ENV.previousStateClass=NON_EXISTENT
+ENV.persistenceRequested=yes
+ENV.degradedConstraintLevel=allow_c
+
+POLICY.allowClassA=true
+POLICY.allowClassB=true
+POLICY.allowClassC=true
+POLICY.requirePresenceForClassC=true
+POLICY.requireCommitForClassC=true
+POLICY.allowExport=true
+POLICY.failSafeOnUncertainty=true
+POLICY.quarantineOnReplay=true
+POLICY.downgradeOnModeRestriction=true</textarea>
+            </label>
+
+            <div class="action-grid script-action-grid">
+              <button id="applyScriptBtn" class="btn btn-primary" type="button">Apply Script</button>
+              <button id="loadScenarioScriptBtn" class="btn btn-secondary" type="button">Load Scenario Into Script</button>
+              <button id="resetScriptBtn" class="btn btn-ghost" type="button">Reset Script</button>
+              <button id="copyScriptBtn" class="btn btn-ghost" type="button">Copy Script</button>
+            </div>
+
+            <div id="scriptStatus" class="script-status faint" aria-live="polite">
+              Structured runtime script ready.
+            </div>
           </div>
         </section>
 
