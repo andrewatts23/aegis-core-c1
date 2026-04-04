@@ -10,6 +10,7 @@
     - It does NOT claim RTL, ASIC, formal proof closure, or fabrication readiness.
     - Conceptual views (register map, signal view, packet anatomy) remain explanatory.
     - PF-15 Guardian / Protected-User is explicitly surfaced as limited / public-build scoped.
+    - Structured Runtime Script is a real alternate input surface for the same runtime fields.
   */
 
   // ---------------------------------------------------------------------------
@@ -304,6 +305,12 @@
     cadenceInput: byId("cadenceInput"),
     cadenceUnit: byId("cadenceUnit"),
     scenarioNarrative: byId("scenarioNarrative"),
+    runtimeScript: byId("runtimeScript"),
+    applyScriptBtn: byId("applyScriptBtn"),
+    loadScenarioScriptBtn: byId("loadScenarioScriptBtn"),
+    resetScriptBtn: byId("resetScriptBtn"),
+    copyScriptBtn: byId("copyScriptBtn"),
+    scriptStatus: byId("scriptStatus"),
     requestEditor: byId("requestEditor"),
     policyEditor: byId("policyEditor"),
     reasonBadge: byId("reasonBadge"),
@@ -346,6 +353,7 @@
   let traceTick = 0;
   let lastEvaluation = null;
   let envEditorHost = null;
+  let defaultScriptTemplate = "";
 
   // ---------------------------------------------------------------------------
   // Initialization
@@ -382,6 +390,7 @@
       els.modeSelect.addEventListener("change", function () {
         currentScenario.mode = els.modeSelect.value;
         trace("Mode override applied: " + currentScenario.mode + ".");
+        syncScriptFromCurrentScenario(false);
         recomputePreview(true);
       });
     }
@@ -390,6 +399,30 @@
       els.scenarioNarrative.addEventListener("input", function () {
         currentScenario.narrative = els.scenarioNarrative.value;
       });
+    }
+
+    if (els.applyScriptBtn) {
+      els.applyScriptBtn.addEventListener("click", applyRuntimeScript);
+    }
+
+    if (els.loadScenarioScriptBtn) {
+      els.loadScenarioScriptBtn.addEventListener("click", function () {
+        syncScriptFromCurrentScenario(true);
+      });
+    }
+
+    if (els.resetScriptBtn) {
+      els.resetScriptBtn.addEventListener("click", function () {
+        if (els.runtimeScript) {
+          els.runtimeScript.value = defaultScriptTemplate;
+        }
+        setScriptStatus("Structured runtime script reset to current scenario baseline.");
+        trace("Runtime script reset to scenario baseline.");
+      });
+    }
+
+    if (els.copyScriptBtn) {
+      els.copyScriptBtn.addEventListener("click", copyRuntimeScript);
     }
 
     if (els.runBtn) els.runBtn.addEventListener("click", runScenario);
@@ -490,6 +523,11 @@
     if (els.scenarioNarrative) els.scenarioNarrative.value = currentScenario.narrative || "";
     if (els.scenarioSelect) els.scenarioSelect.value = currentScenario.id;
 
+    syncScriptFromCurrentScenario(false);
+    if (els.runtimeScript && !els.runtimeScript.value.trim()) {
+      els.runtimeScript.value = defaultScriptTemplate;
+    }
+
     trace("Scenario loaded: " + currentScenario.name + ".");
     trace("Public runtime boundary: live adjudication reference engine; conceptual hardware views remain explanatory.");
     recomputePreview(false);
@@ -511,6 +549,212 @@
     }
     if (els.traceList) {
       els.traceList.innerHTML = "";
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Structured Runtime Script
+  // ---------------------------------------------------------------------------
+
+  function buildRuntimeScriptFromScenario(scenario) {
+    const lines = [];
+
+    lines.push("MODE=" + String(scenario.mode || "FULL_LEGITIMACY"));
+    lines.push("");
+
+    Object.entries(scenario.request || {}).forEach(function (entry) {
+      lines.push("REQUEST." + entry[0] + "=" + String(entry[1]));
+    });
+
+    lines.push("");
+
+    const env = normalizeEnv(scenario.env || {});
+    ENV_FIELDS.forEach(function (field) {
+      const key = field[0];
+      lines.push("ENV." + key + "=" + String(env[key]));
+    });
+
+    lines.push("");
+
+    const policies = Object.assign({}, deepClone(BASE_POLICIES), scenario.policies || {});
+    POLICY_FIELDS.forEach(function (pair) {
+      const key = pair[0];
+      lines.push("POLICY." + key + "=" + String(!!policies[key]));
+    });
+
+    return lines.join("\n");
+  }
+
+  function syncScriptFromCurrentScenario(logIt) {
+    defaultScriptTemplate = buildRuntimeScriptFromScenario(currentScenario);
+    if (els.runtimeScript) {
+      els.runtimeScript.value = defaultScriptTemplate;
+    }
+    setScriptStatus("Structured runtime script synchronized to current scenario.");
+    if (logIt) {
+      trace("Runtime script synchronized from current scenario.");
+    }
+  }
+
+  function applyRuntimeScript() {
+    if (!els.runtimeScript) return;
+
+    const raw = String(els.runtimeScript.value || "");
+    const parseResult = parseRuntimeScript(raw);
+
+    if (!parseResult.ok) {
+      setScriptStatus("Script apply failed: " + parseResult.error);
+      trace("Runtime script apply failed: " + parseResult.error);
+      return;
+    }
+
+    currentScenario.mode = parseResult.output.mode;
+    currentScenario.request = parseResult.output.request;
+    currentScenario.env = normalizeEnv(parseResult.output.env);
+    currentScenario.policies = Object.assign({}, deepClone(BASE_POLICIES), parseResult.output.policies);
+
+    if (els.modeSelect) els.modeSelect.value = currentScenario.mode;
+
+    renderRequestEditor();
+    renderPolicyEditor();
+    renderEnvironmentEditor();
+    recomputePreview(false);
+
+    setScriptStatus("Structured runtime script applied successfully.");
+    trace("Runtime script applied into live runtime fields.");
+  }
+
+  function parseRuntimeScript(raw) {
+    const output = {
+      mode: currentScenario.mode || "FULL_LEGITIMACY",
+      request: deepClone(currentScenario.request),
+      env: normalizeEnv(currentScenario.env || {}),
+      policies: Object.assign({}, deepClone(BASE_POLICIES), currentScenario.policies || {})
+    };
+
+    const allowedModes = [
+      "FULL_LEGITIMACY",
+      "DEGRADED_LEGITIMACY",
+      "QUARANTINE_MODE",
+      "EMERGENCY_PRESERVE_MODE",
+      "SAFE_HALT"
+    ];
+
+    const lines = String(raw || "").split(/\r?\n/);
+
+    for (let i = 0; i < lines.length; i += 1) {
+      const originalLine = lines[i];
+      const lineNumber = i + 1;
+      const line = originalLine.trim();
+
+      if (!line) continue;
+      if (line.startsWith("#")) continue;
+      if (line.startsWith("//")) continue;
+
+      const eqIndex = line.indexOf("=");
+      if (eqIndex <= 0) {
+        return {
+          ok: false,
+          error: "Line " + lineNumber + " is missing '='."
+        };
+      }
+
+      const left = line.slice(0, eqIndex).trim();
+      const right = line.slice(eqIndex + 1).trim();
+
+      if (!left) {
+        return {
+          ok: false,
+          error: "Line " + lineNumber + " has an empty key."
+        };
+      }
+
+      if (left === "MODE") {
+        const modeValue = right.toUpperCase();
+        if (allowedModes.indexOf(modeValue) === -1) {
+          return {
+            ok: false,
+            error: "Line " + lineNumber + " has invalid MODE value '" + right + "'."
+          };
+        }
+        output.mode = modeValue;
+        continue;
+      }
+
+      if (left.indexOf("REQUEST.") === 0) {
+        const key = left.slice("REQUEST.".length);
+        if (!(key in output.request)) {
+          return {
+            ok: false,
+            error: "Line " + lineNumber + " references unknown REQUEST field '" + key + "'."
+          };
+        }
+        output.request[key] = right;
+        continue;
+      }
+
+      if (left.indexOf("ENV.") === 0) {
+        const key = left.slice("ENV.".length);
+        if (!(key in output.env)) {
+          return {
+            ok: false,
+            error: "Line " + lineNumber + " references unknown ENV field '" + key + "'."
+          };
+        }
+        output.env[key] = right;
+        continue;
+      }
+
+      if (left.indexOf("POLICY.") === 0) {
+        const key = left.slice("POLICY.".length);
+        if (!(key in output.policies)) {
+          return {
+            ok: false,
+            error: "Line " + lineNumber + " references unknown POLICY field '" + key + "'."
+          };
+        }
+        const boolParsed = parseBooleanString(right);
+        if (boolParsed == null) {
+          return {
+            ok: false,
+            error: "Line " + lineNumber + " has invalid boolean value '" + right + "' for POLICY." + key + "."
+          };
+        }
+        output.policies[key] = boolParsed;
+        continue;
+      }
+
+      return {
+        ok: false,
+        error: "Line " + lineNumber + " uses unknown key prefix '" + left + "'."
+      };
+    }
+
+    return { ok: true, output: output };
+  }
+
+  async function copyRuntimeScript() {
+    if (!els.runtimeScript) return;
+    const text = String(els.runtimeScript.value || "");
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        await navigator.clipboard.writeText(text);
+      } else {
+        els.runtimeScript.focus();
+        els.runtimeScript.select();
+        document.execCommand("copy");
+      }
+      setScriptStatus("Structured runtime script copied.");
+      trace("Runtime script copied.");
+    } catch (error) {
+      setScriptStatus("Copy failed. You can still select the script manually.");
+      trace("Runtime script copy failed.");
+    }
+  }
+
+  function setScriptStatus(message) {
+    if (els.scriptStatus) {
+      els.scriptStatus.textContent = message;
     }
   }
 
@@ -747,7 +991,7 @@
       els.auditRecord.textContent = "Run progression in motion. The final legitimacy record will anchor at S11.";
     }
 
-    trace("Evaluation prepared from live request, policy, and environment inputs.");
+    trace("Evaluation prepared from live request, policy, environment, and script-resolved inputs.");
   }
 
   function finalizeScenario() {
@@ -1849,7 +2093,9 @@
     }
 
     renderRequestEditor();
+    renderPolicyEditor();
     renderEnvironmentEditor();
+    syncScriptFromCurrentScenario(false);
     recomputePreview(true);
     trace("Adversarial preset applied: " + name + ".");
   }
@@ -1934,6 +2180,13 @@
 
     if (!exists) items.push(name);
     return items.join(" | ");
+  }
+
+  function parseBooleanString(value) {
+    const v = String(value || "").trim().toLowerCase();
+    if (v === "true") return true;
+    if (v === "false") return false;
+    return null;
   }
 
   function predicatePassed(predicates, id) {
